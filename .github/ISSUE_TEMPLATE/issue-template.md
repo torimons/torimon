@@ -1,14 +1,18 @@
 ---
 name: Issue template
-about: Issueを書く際の必要事項です
+about: 
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-- 概要を書いてください。
+## 概要
 
-- このIssueに取り掛かるために完了している必要があるIssue番号を列挙してください
 
-- 参照したnotionページのURLを貼ってください
+
+
+## このIssueに取り掛かるために完了している必要があるIssue番号
+
+
+## 参照したnotionページのURLを貼ってください
