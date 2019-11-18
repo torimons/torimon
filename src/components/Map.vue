@@ -72,13 +72,13 @@ export default class Map extends Vue {
         */
     }
 
-    // マーカーが押された際に呼び出される関数
-    private updateFocusedMarker(e: Event): void {
-        /*
-        （vuexの状態更新も行う必要がある）
-        押したマーカーのスポットの情報の取得
-        ポップアップの表示
-        */
+    /**
+     * 
+     * @param e マーカがクリックされたときに渡されるイベント
+     */
+    private updateFocusedMarker(e: L.LeafletEvent): void {
+        mapViewStore.setFocusedSpot(e.target.options.id);
+        mapViewStore.setSpotInfoIsVisible(true);
     }
 
     // ズームレベルや階層が変更された際のオブジェクトの表示切り替え

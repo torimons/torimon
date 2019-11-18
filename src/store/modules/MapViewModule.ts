@@ -83,14 +83,30 @@ export class MapViewModule extends VuexModule implements MapViewState {
     }
 
     /**
-     * Mapコンポーネント上でフォーカスされているスポットのIDを更新する
+     * Mapコンポーネント上でフォーカスされているマップIDを更新する
      * @param newFocusedMapId 新しくフォーカスされるマップのID
-     * @param newFocusedSpotId 新しいフォーカスされるスポットのID
      */
     @Mutation
-    public setFocusedSpot(newFocusedSpot: {mapId: number, spotId: number}): void {
-        this.focusedMapId  = newFocusedSpot.mapId;
-        this.focusedSpotId = newFocusedSpot.spotId;
+    public setFocusedMap(newFocusedMapId: number): void {
+        this.focusedMapId  = newFocusedMapId;
+    }
+
+    /**
+     * Mapコンポーネント上でフォーカスされているスポットのIDを更新する
+     * @param newFocusedSpotId 新しくフォーカスされるスポットのID
+     */
+    @Mutation
+    public setFocusedSpot(newFocusedSpotId: number): void {
+        this.focusedSpotId = newFocusedSpotId;
+    }
+
+    /**
+     * SpotInfoコンポーネントが表示されているかどうかを更新
+     * @param isVisible SpotInfoコンポーネントが表示されているかどうか 
+     */
+    @Mutation
+    public setSpotInfoIsVisible(isVisible: boolean): void {
+        this.spotInfoIsVisible = isVisible;
     }
 
     /**
