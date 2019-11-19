@@ -5,15 +5,19 @@ import { VueConstructor } from 'vue';
 
 
 describe('components/Map.vue:updateFocusedSpot', () => {
+    const localVue: VueConstructor<any> = createLocalVue();
+    const wrapper: any = shallowMount( Map, {
+        localVue,
+        store,
+        attachToDocument: true,
+    });
     it('渡されたLeafletイベントのスポットIDを持つスポットが新しいfocuseSpotとしてstoreに登録される', () => {
-        const localVue: VueConstructor<any> = createLocalVue();
-        const wrapper: Wrapper<Map> = shallowMount( Map, {
-            localVue,
-            store,
-            attachToDocument: true,
-        });
+        wrapper.vm.updateFocusedSpot({target: {options: {spotId: 1}}});
+        expect(store.state.mapView.focusedSpotId).toBe(1);
     });
 
     it('SpotInfoコンポーネントの表示状態をtrue(表示)になるようにstoreを更新する', () => {
+        wrapper.vm.updateFocusedSpot({target: {options: {spotId: 1}}});
+        expect(store.state.mapView.spotInfoIsVisible).toBe(true);
     });
 });
