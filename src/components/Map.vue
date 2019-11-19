@@ -1,5 +1,5 @@
 <template>
-    <div id="map">map</div>
+    <div id="leafletmap">map</div>
 </template>
 
 <script lang="ts">
@@ -7,9 +7,9 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { mapViewStore } from '@/store/modules/MapViewModule';
 import { mapState } from 'vuex';
 import { SpotForMap, Bounds, Coordinate} from '@/store/types';
-import store from '../store';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import store from '@/store';
 
 /*
 leafletの導入
@@ -46,7 +46,7 @@ export default class Map extends Vue {
         */
         this.centerLat = this.calculateCenter(mapViewStore.rootMapBounds).lat;
         this.centerLng = this.calculateCenter(mapViewStore.rootMapBounds).lng;
-        this.map = L.map('map').setView([this.centerLat, this.centerLng], this.zoomLevel);
+        this.map = L.map('leafletmap').setView([this.centerLat, this.centerLng], this.zoomLevel);
         this.tileLayer = L.tileLayer(
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         ).addTo(this.map);
@@ -79,7 +79,7 @@ export default class Map extends Vue {
      * @param e マーカーがクリックされたときに渡されるイベント
      */
     private updateFocusedSpot(e: L.LeafletEvent): void {
-        mapViewStore.setFocusedSpot(e.target.options.id);
+        mapViewStore.setFocusedSpot(e.target.options.spotId);
         mapViewStore.setSpotInfoIsVisible(true);
     }
 
