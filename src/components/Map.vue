@@ -6,7 +6,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { mapViewStore } from '@/store/modules/MapViewModule';
 import { mapState } from 'vuex';
-import { SpotForMap, Bounds ,Coordinate} from '@/store/types'
+import { SpotForMap, Bounds, Coordinate} from '@/store/types';
 import store from '../store';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -57,7 +57,7 @@ export default class Map extends Vue {
      * @param bounds 中心座標を計算したい地図の範囲
      * @return 中心座標
      */
-    private calculateCenter(bounds: Bounds): Coordinate{
+    private calculateCenter(bounds: Bounds): Coordinate {
         const centerLat = (bounds.topL.lat + bounds.botR.lat) / 2;
         const centerLng = (bounds.topL.lng + bounds.botR.lng) / 2;
         return { lat: centerLat, lng: centerLng };
@@ -73,10 +73,12 @@ export default class Map extends Vue {
     }
 
     /**
-     * 
-     * @param e マーカがクリックされたときに渡されるイベント
+     * スポットマーカーがクリックされたときに呼び出される関数
+     * - どのスポットがフォーカスされているかの状態を更新する
+     * - SpotInfoコンポーネントの表示状態をtrue(表示)にする
+     * @param e マーカーがクリックされたときに渡されるイベント
      */
-    private updateFocusedMarker(e: L.LeafletEvent): void {
+    private updateFocusedSpot(e: L.LeafletEvent): void {
         mapViewStore.setFocusedSpot(e.target.options.id);
         mapViewStore.setSpotInfoIsVisible(true);
     }

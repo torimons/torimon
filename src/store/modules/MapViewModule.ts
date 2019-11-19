@@ -102,7 +102,7 @@ export class MapViewModule extends VuexModule implements MapViewState {
 
     /**
      * SpotInfoコンポーネントが表示されているかどうかを更新
-     * @param isVisible SpotInfoコンポーネントが表示されているかどうか 
+     * @param isVisible SpotInfoコンポーネントが表示されているかどうか
      */
     @Mutation
     public setSpotInfoIsVisible(isVisible: boolean): void {

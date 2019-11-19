@@ -150,12 +150,17 @@ describe('components/SpotInfo.vue', () => {
         expect(actualInfoOfCurrentSpot).toEqual(expectedInfoOfCurrentSpot);
     });
 
-    it('setterでsetしたcurrentSpotIdがmapViewStoreのstateに登録されている', () => {
+    it('MutationでsetしたcurrentMapIdがmapViewStoreのstateに登録されている', () => {
         const expectedNewFocusedMapId: number  = 1;
+        mapViewStore.setFocusedMap(expectedNewFocusedMapId);
+        const actualFocusedMapId: number = mapViewStore.focusedMapId;
+        expect(actualFocusedMapId).toBe(expectedNewFocusedMapId);
+    });
+
+    it('MutationでsetしたcurrentSpotIdがmapViewStoreのstateに登録されている', () => {
         const expectedNewFocusedSpotId: number = 0;
-        mapViewStore.setFocusedSpot({mapId: expectedNewFocusedMapId, spotId: expectedNewFocusedSpotId});
+        mapViewStore.setFocusedSpot(expectedNewFocusedSpotId);
         const actualFocusedSpotId: number = mapViewStore.focusedSpotId;
         expect(actualFocusedSpotId).toBe(expectedNewFocusedSpotId);
     });
-
 });
