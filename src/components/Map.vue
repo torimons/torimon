@@ -37,13 +37,6 @@ export default class Map extends Vue {
     private tileLayer!: L.TileLayer;
 
     public mounted() {
-        /*
-        osmタイルの初期化
-        表示するマップのタイルの表示
-        現在地の取得と現在地周りの表示
-        初期化時のマーカー表示
-        初期化時のオブジェクト表示
-        */
         this.centerLat = this.calculateCenter(mapViewStore.rootMapBounds).lat;
         this.centerLng = this.calculateCenter(mapViewStore.rootMapBounds).lng;
         this.map = L.map('leafletmap').setView([this.centerLat, this.centerLng], this.zoomLevel);
