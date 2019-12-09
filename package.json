@@ -6,7 +6,7 @@
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
-        "test:unit": "vue-cli-service test:unit",
+        "test:unit": "jest --no-cache",
         "typedoc": "typedoc --out ./docs/ ./src/"
     },
     "dependencies": {
@@ -38,6 +38,7 @@
     "jest": {
         "moduleNameMapper": {
             "\\.(css)$": "/node_modules/jest-css-modules"
-        }
+        },
+        "no-cache": true
     }
 }
