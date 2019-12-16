@@ -74,7 +74,7 @@ export class MapViewModule extends VuexModule implements MapViewState {
      */
     public displayLevel: DisplayLevelType = 'default';
 
-    /** 
+    /**
      * MapView上でスポットアイコンやポリゴンが表示されるマップのID
      */
     public mapIdToDisplay: number = this.rootMapId;
@@ -209,7 +209,7 @@ export class MapViewModule extends VuexModule implements MapViewState {
     get getMapIdToDisplay() {
         return (): number => {
             return this.mapIdToDisplay;
-        }
+        };
     }
 
     /**
@@ -280,13 +280,13 @@ export class MapViewModule extends VuexModule implements MapViewState {
     }
 
     /**
-     * Mapコンポーネントでポリゴンやスポットマーカーが表示されることになる  
-     * マップのIDを更新する 
+     * Mapコンポーネントでポリゴンやスポットマーカーが表示されることになる
+     * マップのIDを更新する
      * @param newMapIdToDisplay 新しくセットするマップID
      */
     @Mutation
     public setMapIdToDisplay(newMapIdToDisplay: number): void {
-        this.mapIdToDisplay = newMapIdToDisplay; 
+        this.mapIdToDisplay = newMapIdToDisplay;
     }
 
     /**
