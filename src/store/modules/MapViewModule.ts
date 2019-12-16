@@ -74,6 +74,11 @@ export class MapViewModule extends VuexModule implements MapViewState {
      */
     public displayLevel: DisplayLevelType = 'default';
 
+    /** 
+     * MapView上でスポットアイコンやポリゴンが表示されるマップのID
+     */
+    public mapIdToDisplay: number = this.rootMapId;
+
     /**
      * Mapコンポーネントが扱うマップの範囲を返す
      * @return マップの範囲
@@ -198,6 +203,16 @@ export class MapViewModule extends VuexModule implements MapViewState {
     }
 
     /**
+     * MapView上でスポットアイコンやポリゴンが表示されるマップのIDを返す
+     * @return マップID
+     */
+    get getMapIdToDisplay() {
+        return (): number => {
+            return this.mapIdToDisplay;
+        }
+    }
+
+    /**
      * Mapコンポーネント上でフォーカスされているスポットのIDを更新する
      * @param newFocusedSpot 新しくフォーカスされるスポット
      * 中にmapId, spotIdを持つ
@@ -262,6 +277,16 @@ export class MapViewModule extends VuexModule implements MapViewState {
     @Mutation
     public setNonExistentOfCenterSpotWithDetailMap(): void {
         this.idOfCenterSpotWithDetailMap = null;
+    }
+
+    /**
+     * Mapコンポーネントでポリゴンやスポットマーカーが表示されることになる  
+     * マップのIDを更新する 
+     * @param newMapIdToDisplay 新しくセットするマップID
+     */
+    @Mutation
+    public setMapIdToDisplay(newMapIdToDisplay: number): void {
+        this.mapIdToDisplay = newMapIdToDisplay; 
     }
 
     /**

@@ -102,16 +102,6 @@ describe('store/modules/MapViewModule.ts', () => {
         }).toThrow(SpotNotFoundError);
     });
 
-    it('setterでsetしたFocusedSpotがmapViewStoreのstateに登録されている', () => {
-        const expectedNewFocusedSpot: {mapId: number, spotId: number} = {
-            mapId: 1,
-            spotId: 0,
-        };
-        mapViewStore.setFocusedSpot(expectedNewFocusedSpot);
-        const actualFocusedSpot: {mapId: number, spotId: number} = mapViewStore.focusedSpot;
-        expect(actualFocusedSpot).toBe(expectedNewFocusedSpot);
-    });
-
     it('getLastViewedDetailMapIdでスポットの参照された詳細マップIdを取得する', () => {
         // lastViewdDetailMapIdの初期値はnullである
         const expectedLastViewedDetailMapId: null = null;
@@ -133,9 +123,30 @@ describe('store/modules/MapViewModule.ts', () => {
         }).toThrow(NoDetailMapsError);
     });
 
+    it('stateのdisplayLevelをgetterで取得する', () => {
+        // テストデータの初期値はdefault
+        const expectedDisplayLevel: DisplayLevelType = 'default';
+        expect(mapViewStore.getDisplayLevel()).toBe(expectedDisplayLevel);
+    });
+
     it('stateに登録したidOfCenterSpotWithDetailMapを取得する', () => {
         const expectedId: number | null = expectedMapViewState.idOfCenterSpotWithDetailMap;
         expect(mapViewStore.getIdOfCenterSpotWithDetailMap()).toBe(expectedId);
+    });
+
+    it('stateに登録したmapIdToDisplayを取得する', () => {
+        const expectedMapId: number = expectedMapViewState.mapIdToDisplay;
+        expect(mapViewStore.getMapIdToDisplay()).toBe(expectedMapId);
+    });
+
+    it('setterでsetしたFocusedSpotがmapViewStoreのstateに登録されている', () => {
+        const expectedNewFocusedSpot: {mapId: number, spotId: number} = {
+            mapId: 1,
+            spotId: 0,
+        };
+        mapViewStore.setFocusedSpot(expectedNewFocusedSpot);
+        const actualFocusedSpot: {mapId: number, spotId: number} = mapViewStore.focusedSpot;
+        expect(actualFocusedSpot).toBe(expectedNewFocusedSpot);
     });
 
     it('スポットに存在しない詳細マップをlastViewDetaiMapIdにセットしようとすると例外が発生する', () => {
@@ -174,6 +185,12 @@ describe('store/modules/MapViewModule.ts', () => {
         expect(actualDetailMapId).toBe(expectedDetailMapId);
     });
 
+    it('setしたnewDisplayLevelがstateに登録されている', () => {
+        const newDisplayLevel: DisplayLevelType = 'detail';
+        mapViewStore.setDisplayLevel(newDisplayLevel);
+        expect(mapViewStore.displayLevel).toBe(newDisplayLevel);
+    });
+
     it('setIdOfCenterSpotWithDetailMap()でsetしたidOfCenterSpotWithDetailMapがmapViewStoreのstateに登録されている', () => {
         const expectedIdOfCenterSpotWithDetailMap = 1;
         mapViewStore.setIdOfCenterSpotWithDetailMap(expectedIdOfCenterSpotWithDetailMap);
@@ -185,15 +202,9 @@ describe('store/modules/MapViewModule.ts', () => {
         expect(mapViewStore.idOfCenterSpotWithDetailMap).toBe(null);
     });
 
-    it('setしたnewDisplayLevelがstateに登録されている', () => {
-        const newDisplayLevel: DisplayLevelType = 'detail';
-        mapViewStore.setDisplayLevel(newDisplayLevel);
-        expect(mapViewStore.displayLevel).toBe(newDisplayLevel);
-    });
-
-    it('stateのdisplayLevelをgetterで取得する', () => {
-        // テストデータの初期値はdefault
-        const expectedDisplayLevel: DisplayLevelType = 'default';
-        expect(mapViewStore.getDisplayLevel()).toBe(expectedDisplayLevel);
+    it('setしたnewMapIdToDisplayがstateに登録されている', () => {
+        const newMapIdToDisplay: number = 1;
+        mapViewStore.setMapIdToDisplay(newMapIdToDisplay);
+        expect(mapViewStore.mapIdToDisplay).toBe(newMapIdToDisplay);
     });
 });

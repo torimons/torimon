@@ -154,5 +154,6 @@ export const testMapViewState: MapViewState = {
     spotInfoIsVisible: false,
     displayLevel: 'default',
     idOfCenterSpotWithDetailMap: 0,
+    mapIdToDisplay: 0,
 };
 
