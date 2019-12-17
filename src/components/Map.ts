@@ -1,10 +1,12 @@
 import { Component, Vue } from 'vue-property-decorator';
-import { mapViewStore } from '@/store/modules/MapViewModule';
-import { SpotForMap, Coordinate, Bounds } from '@/store/types';
+import { mapViewStore, MapViewModule } from '@/store/modules/MapViewModule';
+import { SpotForMap, Coordinate, Bounds, DisplayLevelType } from '@/store/types';
 import { GeolocationWrapper } from '@/components/GeolocationWrapper.ts';
 import 'leaflet/dist/leaflet.css';
 import L, { LeafletEvent, TileLayer } from 'leaflet';
 import { GeoJsonObject, GeometryObject, Feature, FeatureCollection } from 'geojson';
+import store from '@/store';
+import { StoreType } from '@/store';
 
 @Component
 export default class Map extends Vue {
@@ -34,6 +36,8 @@ export default class Map extends Vue {
     });
     private spotMarkers: L.Marker[] = [];
     private currentLocationMarker: L.Marker = L.marker([0, 0], { icon: this.currentLocationIcon });
+    private rootMapId: number = mapViewStore.rootMapId;
+    private mapIdToDisplay: number = this.rootMapId;
 
     /**
      * とりあえず地図の表示を行なっています．
@@ -52,16 +56,17 @@ export default class Map extends Vue {
             },
         ).addTo(this.map);
 
-        const rootMapSpots: SpotForMap[] = mapViewStore.getSpotsForMap(mapViewStore.rootMapId);
+        const rootMapSpots: SpotForMap[] = mapViewStore.getSpotsForMap(this.rootMapId);
         this.replaceMarkersWith(rootMapSpots, this.defaultSpotIcon, () => { /*何もしない*/ });
         // sampleMapのポリゴン表示
         // $nextTick()はテスト実行時のエラーを回避するために使用しています．
         this.$nextTick().then(() => {
             // 現状mapIdのgetterがないため直接指定しています．
-            this.displayPolygons(mapViewStore.rootMapId);
+            this.displayPolygons(this.rootMapId);
         });
         this.currentLocationMarker.addTo(this.map);
         this.bindMarkerToCurrentPosition(this.currentLocationMarker);
+        this.watchStoreForDisplayMap();
     }
 
     /**
@@ -173,5 +178,58 @@ export default class Map extends Vue {
             },
         });
         this.map.addLayer(this.polygonLayer);
+    }
+
+    /**
+     * mapIdToDisplayの更新のためにStoreのウォッチを行う
+     */
+    private watchStoreForDisplayMap(): void {
+        store.watch(
+            (state: StoreType, getters) => getters['mapView/getDisplayLevel'](),
+            (value, oldValue) => this.updateMapIdToDisplay(),
+        );
+        store.watch(
+            (state: StoreType, getters) => getters['mapView/getIdOfCenterSpotWithDetailMap'](),
+            (value, oldValue) => this.updateMapIdToDisplay(),
+        );
+        store.watch(
+            (state: StoreType, getters) => {
+                const centerSpotId = getters['mapView/getIdOfCenterSpotWithDetailMap']();
+                if (centerSpotId != null) {
+                    return getters['mapView/getLastViewedDetailMapId']({
+                        parentMapId: this.rootMapId,
+                        spotId: centerSpotId,
+                    });
+                }
+            },
+            (value, oldValue) => this.updateMapIdToDisplay(),
+        );
+    }
+
+    /**
+     * Storeを参照してmapIdToDisplayの更新を行う
+     */
+    private updateMapIdToDisplay(): void {
+        const displayLevel: DisplayLevelType = mapViewStore.getDisplayLevel();
+        if (displayLevel === 'default') {
+            this.mapIdToDisplay = this.rootMapId;
+            return;
+        }
+        const idOfCenterSpot: number | null = mapViewStore.getIdOfCenterSpotWithDetailMap();
+        if (idOfCenterSpot === null) {
+            this.mapIdToDisplay = this.rootMapId;
+            return;
+        }
+        const lastViewedDetailMapId: number | null =
+            mapViewStore.getLastViewedDetailMapId({parentMapId: this.mapIdToDisplay, spotId: idOfCenterSpot});
+        if (lastViewedDetailMapId != null) {
+            this.mapIdToDisplay = lastViewedDetailMapId;
+            return;
+        }
+        const floorMapIds: number[] = mapViewStore.getSpotById({
+            parentMapId: this.rootMapId,
+            spotId: idOfCenterSpot,
+        }).detailMapIds;
+        this.mapIdToDisplay = floorMapIds[0];
     }
 }
