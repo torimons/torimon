@@ -98,15 +98,6 @@ export default class Map extends Vue {
         }
     }
 
-    // マーカーが押された際に呼び出される関数
-    private updateFocusedMarker(e: Event): void {
-        /*
-            （vuexの状態更新も行う必要がある）
-            押したマーカーのスポットの情報の取得
-            ポップアップの表示
-            */
-    }
-
     /**
      * storeのgetSpotsForMapで取得したspotの情報から
      * shapeの情報を取り出してleafletで扱える形式に変換する．
@@ -134,7 +125,7 @@ export default class Map extends Vue {
     /**
      * 指定されたIDを持つ地図のポリゴンを表示する
      * polygonLayerメンバを変更して表示内容を変える．
-     * @params 地図のID
+     * @params 表示するスポットの配列
      */
     private displayPolygons(spotsForDisplay: SpotForMap[]): void {
         // すでに表示されているポリゴンがある場合は先に削除する
