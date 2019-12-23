@@ -44,7 +44,7 @@ export default class Map extends Vue {
         // $nextTick()はテスト実行時のエラーを回避するために使用しています．
         this.$nextTick().then(() => {
             // 現状mapIdのgetterがないため直接指定しています．
-            this.displayPolygons(mapViewStore.rootMapId);
+            this.displayPolygons(rootMapSpots);
         });
         this.currentLocationMarker.addTo(this.map);
 
@@ -136,13 +136,12 @@ export default class Map extends Vue {
      * polygonLayerメンバを変更して表示内容を変える．
      * @params 地図のID
      */
-    private displayPolygons(mapId: number): void {
+    private displayPolygons(spotsForDisplay: SpotForMap[]): void {
         // すでに表示されているポリゴンがある場合は先に削除する
         if (this.polygonLayer !== undefined) {
             this.map.removeLayer(this.polygonLayer);
         }
-        const spotForMap: SpotForMap[] = mapViewStore.getSpotsForMap(mapId);
-        const shapeGeoJson: GeoJsonObject = this.spotShapeToGeoJson(spotForMap);
+        const shapeGeoJson: GeoJsonObject = this.spotShapeToGeoJson(spotsForDisplay);
         this.polygonLayer = new L.GeoJSON(shapeGeoJson, {
             style: {
                 color: '#555555',
