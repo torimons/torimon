@@ -1,6 +1,7 @@
 import { Component, Vue, Watch} from 'vue-property-decorator';
-import { mapViewGetters, mapViewMutations } from '@/store';
-import { SpotForMap, Coordinate, Bounds, Spot } from '@/store/types';
+import { store, mapViewGetters, mapViewMutations } from '@/store';
+import { MapViewGetters } from '@/store/modules/MapViewModule/MapViewGetters';
+import { SpotForMap, Coordinate, Bounds, Spot, DisplayLevelType } from '@/store/types';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { GeoJsonObject, GeometryObject, Feature, FeatureCollection } from 'geojson';
@@ -60,6 +61,8 @@ export default class Map extends Vue {
 
         this.map.on('zoomend', this.updateDisplayLevel);
         this.map.on('move', this.updateIdOfCenterSpotInRootMap);
+
+        this.watchStoreForDisplayMap();
     }
 
     /**
@@ -224,5 +227,73 @@ export default class Map extends Vue {
      */
     private addRouteToMap(routeLayer: L.Layer): void {
         this.map.addLayer(routeLayer);
+    }
+
+    /**
+     * mapIdToDisplayの更新のためにStoreのウォッチを行う
+     */
+    private watchStoreForDisplayMap(): void {
+        store.watch(
+            (state, getters: MapViewGetters) => getters.displayLevel,
+            (value, oldValue) => this.updateMapIdToDisplay(),
+        );
+        store.watch(
+            (state, getters: MapViewGetters) => getters.idOfCenterSpotInRootMap,
+            (value, oldValue) => this.updateMapIdToDisplay(),
+        );
+        store.watch(
+            (state, getters: MapViewGetters) => {
+                const centerSpotId = getters.idOfCenterSpotInRootMap;
+                if (centerSpotId != null) {
+                    if(getters.spotHasDetailMaps({
+                        parentMapId: mapViewGetters.rootMapId,
+                        spotId: centerSpotId,
+                    })){
+                        return getters.getLastViewedDetailMapId({
+                            parentMapId: mapViewGetters.rootMapId,
+                            spotId: centerSpotId,
+                        });
+                    }
+                    return null;
+                }
+            },
+            (value, oldValue) => this.updateMapIdToDisplay(),
+        );
+    }
+
+    /**
+     * Storeを参照してmapIdToDisplayの更新を行う
+     */
+    private updateMapIdToDisplay(): void {
+        console.log("update");
+        const displayLevel: DisplayLevelType = mapViewGetters.displayLevel;
+        if (displayLevel === 'default') {
+            this.mapIdToDisplay = mapViewGetters.rootMapId;
+            this.displayPolygons(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
+            this.displaySpotMarkers(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
+            return;
+        }
+        const idOfCenterSpot: number | null = mapViewGetters.idOfCenterSpotInRootMap;
+        if (idOfCenterSpot === null) {
+            this.mapIdToDisplay = mapViewGetters.rootMapId;
+            this.displayPolygons(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
+            this.displaySpotMarkers(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
+            return;
+        }
+        const lastViewedDetailMapId: number | null =
+            mapViewGetters.getLastViewedDetailMapId({parentMapId: mapViewGetters.rootMapId, spotId: idOfCenterSpot});
+        if (lastViewedDetailMapId != null) {
+            this.mapIdToDisplay = lastViewedDetailMapId;
+            this.displayPolygons(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
+            this.displaySpotMarkers(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
+            return;
+        }
+        const floorMapIds: number[] = mapViewGetters.getSpotById({
+            parentMapId: mapViewGetters.rootMapId,
+            spotId: idOfCenterSpot,
+        }).detailMapIds;
+        this.mapIdToDisplay = floorMapIds[0];
+        this.displayPolygons(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
+        this.displaySpotMarkers(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
     }
 }
