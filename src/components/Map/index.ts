@@ -274,8 +274,11 @@ export default class Map extends Vue {
      */
     private selectMapToDisplay(): number {
         const displayLevel: DisplayLevelType = mapViewGetters.displayLevel;
+        if (displayLevel === 'default') {
+            return mapViewGetters.rootMapId;
+        }
         const idOfCenterSpot: number | null = mapViewGetters.idOfCenterSpotInRootMap;
-        if (displayLevel === 'default' || idOfCenterSpot === null) {
+        if (idOfCenterSpot === null) {
             return mapViewGetters.rootMapId;
         }
         const centerSpot = { parentMapId: mapViewGetters.rootMapId, spotId: idOfCenterSpot };
