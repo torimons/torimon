@@ -289,10 +289,7 @@ export default class Map extends Vue {
         if (lastViewedDetailMapId != null) {
             return lastViewedDetailMapId;
         }
-        const floorMapIds: number[] = mapViewGetters.getSpotById({
-            parentMapId: mapViewGetters.rootMapId,
-            spotId: idOfCenterSpot,
-        }).detailMapIds;
-        return floorMapIds[0];
+        const firstFloorMapId: number = mapViewGetters.getSpotById(centerSpot).detailMapIds[0];
+        return firstFloorMapId;
     }
 }
