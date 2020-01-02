@@ -241,11 +241,9 @@ export default class Map extends Vue {
             (state, getters: MapViewGetters) => {
                 const centerSpotId = getters.idOfCenterSpotInRootMap;
                 if (centerSpotId != null) {
-                    if (getters.spotHasDetailMaps({parentMapId: mapViewGetters.rootMapId, spotId: centerSpotId})) {
-                        return getters.getLastViewedDetailMapId({
-                            parentMapId: mapViewGetters.rootMapId,
-                            spotId: centerSpotId,
-                        });
+                    const centerSpot = { parentMapId: mapViewGetters.rootMapId, spotId: centerSpotId };
+                    if (getters.spotHasDetailMaps(centerSpot)) {
+                        return getters.getLastViewedDetailMapId(centerSpot);
                     }
                 }
                 return null;
@@ -277,11 +275,11 @@ export default class Map extends Vue {
         if (displayLevel === 'default') {
             return mapViewGetters.rootMapId;
         }
-        const idOfCenterSpot: number | null = mapViewGetters.idOfCenterSpotInRootMap;
-        if (idOfCenterSpot === null) {
+        const centerSpotId: number | null = mapViewGetters.idOfCenterSpotInRootMap;
+        if (centerSpotId === null) {
             return mapViewGetters.rootMapId;
         }
-        const centerSpot = { parentMapId: mapViewGetters.rootMapId, spotId: idOfCenterSpot };
+        const centerSpot = { parentMapId: mapViewGetters.rootMapId, spotId: centerSpotId };
         if (!mapViewGetters.spotHasDetailMaps(centerSpot)) {
             return mapViewGetters.rootMapId;
         }
