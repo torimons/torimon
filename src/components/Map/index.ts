@@ -234,7 +234,7 @@ export default class Map extends Vue {
      */
     private watchStoreForDisplayMap(): void {
         store.watch(
-            (state, getters: MapViewGetters) => [ getters.displayLevel, getters.idOfCenterSpotInRootMap],
+            (state, getters: MapViewGetters) => [ getters.displayLevel, getters.idOfCenterSpotInRootMap ],
             this.updateMap,
         );
         store.watch(
