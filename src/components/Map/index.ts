@@ -285,8 +285,7 @@ export default class Map extends Vue {
         if (!mapViewGetters.spotHasDetailMaps(centerSpot)) {
             return mapViewGetters.rootMapId;
         }
-        const lastViewedDetailMapId: number | null =
-            mapViewGetters.getLastViewedDetailMapId(centerSpot);
+        const lastViewedDetailMapId: number | null = mapViewGetters.getLastViewedDetailMapId(centerSpot);
         if (lastViewedDetailMapId != null) {
             return lastViewedDetailMapId;
         }
