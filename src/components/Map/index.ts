@@ -230,7 +230,7 @@ export default class Map extends Vue {
     }
 
     /**
-     * mapIdToDisplayの更新のためにStoreのウォッチを行う
+     * マップ表示の更新のためにStoreのgetterのウォッチを行う
      */
     private watchStoreForDisplayMap(): void {
         store.watch(
@@ -254,8 +254,14 @@ export default class Map extends Vue {
         );
     }
 
+    /**
+     * マップを選択し，そのマップのスポットとポリゴンを表示する
+     * Store.watch()に登録するコールバックメソッドでウォッチ対象が変化する度に実行される
+     * @param value ウォッチ対象の変化後の値．利用されない
+     * @param oldValue ウォッチ対象の変化前の値．利用されない
+     */
     private updateMap(value: any, oldValue: any): void {
-        const newSpotsForDisplayMap: SpotForMap[] = mapViewGetters.getSpotsForMap(this.getMapIdToDisplay());
+        const newSpotsForDisplayMap: SpotForMap[] = mapViewGetters.getSpotsForMap(this.selectMapToDisplay());
         this.$nextTick().then(() => {
             this.displaySpotMarkers(newSpotsForDisplayMap);
             this.displayPolygons(newSpotsForDisplayMap);
@@ -263,10 +269,10 @@ export default class Map extends Vue {
     }
 
     /**
-     * Storeを参照して新しく表示するマップのIDを決定する
+     * Storeを参照して新しく表示するマップのIDを選択する
      * @return 新しく表示するマップのID
      */
-    private getMapIdToDisplay(): number {
+    private selectMapToDisplay(): number {
         const displayLevel: DisplayLevelType = mapViewGetters.displayLevel;
         if (displayLevel === 'default') {
             return mapViewGetters.rootMapId;
@@ -275,11 +281,12 @@ export default class Map extends Vue {
         if (idOfCenterSpot === null) {
             return mapViewGetters.rootMapId;
         }
-        if (!mapViewGetters.spotHasDetailMaps({parentMapId: mapViewGetters.rootMapId, spotId: idOfCenterSpot})) {
+        const centerSpot = { parentMapId: mapViewGetters.rootMapId, spotId: idOfCenterSpot };
+        if (!mapViewGetters.spotHasDetailMaps(centerSpot)) {
             return mapViewGetters.rootMapId;
         }
         const lastViewedDetailMapId: number | null =
-            mapViewGetters.getLastViewedDetailMapId({parentMapId: mapViewGetters.rootMapId, spotId: idOfCenterSpot});
+            mapViewGetters.getLastViewedDetailMapId(centerSpot);
         if (lastViewedDetailMapId != null) {
             return lastViewedDetailMapId;
         }
