@@ -234,20 +234,8 @@ export default class Map extends Vue {
      */
     private watchStoreForDisplayMap(): void {
         store.watch(
-            (state, getters: MapViewGetters) => getters.displayLevel,
-            (value, oldValue) => {
-                const newSpotsForDisplayMap: SpotForMap[] = mapViewGetters.getSpotsForMap(this.updateMapIdToDisplay());
-                this.displaySpotMarkers(newSpotsForDisplayMap);
-                this.displayPolygons(newSpotsForDisplayMap);
-            },
-        );
-        store.watch(
-            (state, getters: MapViewGetters) => getters.idOfCenterSpotInRootMap,
-            (value, oldValue) => {
-                const newSpotsForDisplayMap: SpotForMap[] = mapViewGetters.getSpotsForMap(this.updateMapIdToDisplay());
-                this.displaySpotMarkers(newSpotsForDisplayMap);
-                this.displayPolygons(newSpotsForDisplayMap);
-            },
+            (state, getters: MapViewGetters) => [ getters.displayLevel, getters.idOfCenterSpotInRootMap],
+            this.updateMap,
         );
         store.watch(
             (state, getters: MapViewGetters) => {
@@ -262,19 +250,23 @@ export default class Map extends Vue {
                 }
                 return null;
             },
-            (value, oldValue) => {
-                const newSpotsForDisplayMap: SpotForMap[] = mapViewGetters.getSpotsForMap(this.updateMapIdToDisplay());
-                this.displaySpotMarkers(newSpotsForDisplayMap);
-                this.displayPolygons(newSpotsForDisplayMap);
-            },
+            this.updateMap,
         );
     }
 
+    private updateMap(value: any, oldValue: any): void {
+        const newSpotsForDisplayMap: SpotForMap[] = mapViewGetters.getSpotsForMap(this.getMapIdToDisplay());
+        this.$nextTick().then(() => {
+            this.displaySpotMarkers(newSpotsForDisplayMap);
+            this.displayPolygons(newSpotsForDisplayMap);
+        });
+    }
+
     /**
-     * Storeを参照してmapIdToDisplayの更新を行う
+     * Storeを参照して新しく表示するマップのIDを決定する
      * @return 新しく表示するマップのID
      */
-    private updateMapIdToDisplay(): number {
+    private getMapIdToDisplay(): number {
         const displayLevel: DisplayLevelType = mapViewGetters.displayLevel;
         if (displayLevel === 'default') {
             return mapViewGetters.rootMapId;
