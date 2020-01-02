@@ -127,7 +127,13 @@ export class MapViewGetters extends Getters<MapViewState> {
      */
     public getLastViewedDetailMapId(parentSpot: {parentMapId: number, spotId: number}): number | null {
         if (this.getters.spotHasDetailMaps(parentSpot) === false) {
-            throw new NoDetailMapsError('Spot of { parentMapId: ' + parentSpot.parentMapId + ', spotId: ' + parentSpot.spotId + ' } has no detail maps.');
+            throw new NoDetailMapsError(
+                'Spot of { parentMapId: '
+                + parentSpot.parentMapId
+                + ', spotId: '
+                + parentSpot.spotId
+                + ' } has no detail maps.',
+            );
         }
         const spot = this.getters.getSpotById(parentSpot);
         const lastViewedDetailMapId: number | null = spot.lastViewedDetailMapId;

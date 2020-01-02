@@ -235,65 +235,66 @@ export default class Map extends Vue {
     private watchStoreForDisplayMap(): void {
         store.watch(
             (state, getters: MapViewGetters) => getters.displayLevel,
-            (value, oldValue) => this.updateMapIdToDisplay(),
+            (value, oldValue) => {
+                const newSpotsForDisplayMap: SpotForMap[] = mapViewGetters.getSpotsForMap(this.updateMapIdToDisplay());
+                this.displaySpotMarkers(newSpotsForDisplayMap);
+                this.displayPolygons(newSpotsForDisplayMap);
+            },
         );
         store.watch(
             (state, getters: MapViewGetters) => getters.idOfCenterSpotInRootMap,
-            (value, oldValue) => this.updateMapIdToDisplay(),
+            (value, oldValue) => {
+                const newSpotsForDisplayMap: SpotForMap[] = mapViewGetters.getSpotsForMap(this.updateMapIdToDisplay());
+                this.displaySpotMarkers(newSpotsForDisplayMap);
+                this.displayPolygons(newSpotsForDisplayMap);
+            },
         );
         store.watch(
             (state, getters: MapViewGetters) => {
                 const centerSpotId = getters.idOfCenterSpotInRootMap;
                 if (centerSpotId != null) {
-                    if(getters.spotHasDetailMaps({
-                        parentMapId: mapViewGetters.rootMapId,
-                        spotId: centerSpotId,
-                    })){
+                    if (getters.spotHasDetailMaps({parentMapId: mapViewGetters.rootMapId, spotId: centerSpotId})) {
                         return getters.getLastViewedDetailMapId({
                             parentMapId: mapViewGetters.rootMapId,
                             spotId: centerSpotId,
                         });
                     }
-                    return null;
                 }
+                return null;
             },
-            (value, oldValue) => this.updateMapIdToDisplay(),
+            (value, oldValue) => {
+                const newSpotsForDisplayMap: SpotForMap[] = mapViewGetters.getSpotsForMap(this.updateMapIdToDisplay());
+                this.displaySpotMarkers(newSpotsForDisplayMap);
+                this.displayPolygons(newSpotsForDisplayMap);
+            },
         );
     }
 
     /**
      * Storeを参照してmapIdToDisplayの更新を行う
+     * @return 新しく表示するマップのID
      */
-    private updateMapIdToDisplay(): void {
-        console.log("update");
+    private updateMapIdToDisplay(): number {
         const displayLevel: DisplayLevelType = mapViewGetters.displayLevel;
         if (displayLevel === 'default') {
-            this.mapIdToDisplay = mapViewGetters.rootMapId;
-            this.displayPolygons(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
-            this.displaySpotMarkers(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
-            return;
+            return mapViewGetters.rootMapId;
         }
         const idOfCenterSpot: number | null = mapViewGetters.idOfCenterSpotInRootMap;
         if (idOfCenterSpot === null) {
-            this.mapIdToDisplay = mapViewGetters.rootMapId;
-            this.displayPolygons(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
-            this.displaySpotMarkers(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
-            return;
+            return mapViewGetters.rootMapId;
+        }
+        if (!mapViewGetters.spotHasDetailMaps({parentMapId: mapViewGetters.rootMapId, spotId: idOfCenterSpot})) {
+            return mapViewGetters.rootMapId;
         }
         const lastViewedDetailMapId: number | null =
             mapViewGetters.getLastViewedDetailMapId({parentMapId: mapViewGetters.rootMapId, spotId: idOfCenterSpot});
         if (lastViewedDetailMapId != null) {
-            this.mapIdToDisplay = lastViewedDetailMapId;
-            this.displayPolygons(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
-            this.displaySpotMarkers(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
-            return;
+            return lastViewedDetailMapId;
         }
         const floorMapIds: number[] = mapViewGetters.getSpotById({
             parentMapId: mapViewGetters.rootMapId,
             spotId: idOfCenterSpot,
         }).detailMapIds;
-        this.mapIdToDisplay = floorMapIds[0];
-        this.displayPolygons(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
-        this.displaySpotMarkers(mapViewGetters.getSpotsForMap(this.mapIdToDisplay));
+        return floorMapIds[0];
     }
 }
