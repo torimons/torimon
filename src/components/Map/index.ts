@@ -233,32 +233,29 @@ export default class Map extends Vue {
      * マップ表示の更新のためにStoreのgetterのウォッチを行う
      */
     private watchStoreForDisplayMap(): void {
-        store.watch(
-            (state, getters: MapViewGetters) => [ getters.displayLevel, getters.idOfCenterSpotInRootMap ],
-            this.updateMap,
-        );
-        store.watch(
-            (state, getters: MapViewGetters) => {
-                const centerSpotId = getters.idOfCenterSpotInRootMap;
-                if (centerSpotId != null) {
-                    const centerSpot = { parentMapId: mapViewGetters.rootMapId, spotId: centerSpotId };
-                    if (getters.spotHasDetailMaps(centerSpot)) {
-                        return getters.getLastViewedDetailMapId(centerSpot);
-                    }
+        const getSwitchedFloorMapId = (getters: MapViewGetters) => {
+            const centerSpotId = getters.idOfCenterSpotInRootMap;
+            if (centerSpotId != null) {
+                const centerSpot = { parentMapId: mapViewGetters.rootMapId, spotId: centerSpotId };
+                if (getters.spotHasDetailMaps(centerSpot)) {
+                    return getters.getLastViewedDetailMapId(centerSpot);
                 }
-                return null;
-            },
-            this.updateMap,
+            }
+        };
+        store.watch(
+            (state, getters: MapViewGetters) => [
+                getters.displayLevel,
+                getters.idOfCenterSpotInRootMap,
+                getSwitchedFloorMapId(getters),
+            ],
+            (value, oldValue) => this.updateMap(),
         );
     }
 
     /**
      * マップを選択し，そのマップのスポットとポリゴンを表示する
-     * Store.watch()に登録するコールバックメソッドでウォッチ対象が変化する度に実行される
-     * @param value ウォッチ対象の変化後の値．利用されない
-     * @param oldValue ウォッチ対象の変化前の値．利用されない
      */
-    private updateMap(value: any, oldValue: any): void {
+    private updateMap(): void {
         const newSpotsForDisplayMap: SpotForMap[] = mapViewGetters.getSpotsForMap(this.selectMapToDisplay());
         this.$nextTick().then(() => {
             this.displaySpotMarkers(newSpotsForDisplayMap);
