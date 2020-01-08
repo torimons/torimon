@@ -1,15 +1,14 @@
-import { mapViewGetters, mapViewMutations } from '@/store';
-import { MapViewState, SpotForMap, Coordinate } from '@/store/types';
-import { shallowMount } from '@vue/test-utils';
+import Vuex from 'vuex';
+import { SpotForMap } from '@/store/types';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { GeolocationWrapper } from '@/components/Map/GeolocationWrapper';
-import Vue from 'vue';
 import Map from '@/components/Map';
 import 'leaflet/dist/leaflet.css';
-import L, { map } from 'leaflet';
-import { cloneDeep } from 'lodash';
-import { testMapViewState } from '../../../resources/testMapViewState';
+import L from 'leaflet';
+import { MockMapViewGetters } from '../../../resources/MockMapViewGetters';
+import { MapViewState } from '@/store/modules/MapViewModule/MapViewState';
+import { Module, createStore } from 'vuex-smart-module';
 
-const mapViewStoreTestData: MapViewState = cloneDeep(testMapViewState);
 
 describe('components/Map.vue マーカー切り替えのテスト', () => {
     let wrapper: any;
@@ -34,9 +33,18 @@ describe('components/Map.vue マーカー切り替えのテスト', () => {
     ];
 
     beforeEach(() => {
-        mapViewMutations.setMapViewState(mapViewStoreTestData);
+        // storeのモック作成
+        const mockModule = new Module({
+            state: MapViewState,
+            getters: MockMapViewGetters,
+        });
+        const mockStore = createStore(mockModule);
+        const localVue = createLocalVue();
+        localVue.use(Vuex);
         GeolocationWrapper.watchPosition = jest.fn();
         wrapper = shallowMount(Map, {
+            store: mockStore,
+            localVue,
             attachToDocument: true,
         });
         wrapper.vm.addMarkersToMap = jest.fn();

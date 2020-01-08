@@ -1,6 +1,4 @@
-import { Component, Vue, Watch} from 'vue-property-decorator';
-import { store, mapViewGetters, mapViewMutations } from '@/store';
-import { MapViewGetters } from '@/store/modules/MapViewModule/MapViewGetters';
+import { Component, Vue } from 'vue-property-decorator';
 import { SpotForMap, Coordinate, Bounds, Spot, DisplayLevelType } from '@/store/types';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -9,6 +7,11 @@ import { findNearest, getDistance } from 'geolib';
 import { GeolibInputCoordinates } from 'geolib/es/types';
 import CurrentLocationMarker from '@/components/Map/Marker/CurrentLocationMarker';
 import DefaultSpotMarker from '@/components/Map/Marker/DefaultSpotMarker';
+import { MapViewModule } from '@/store/modules/MapViewModule';
+import { MapViewGetters } from '@/store/modules/MapViewModule/MapViewGetters';
+import { MapViewMutations } from '@/store/modules/MapViewModule/MapViewMutations';
+import { mapViewGetters } from '@/store';
+import { Committer } from 'vuex-smart-module/lib/assets';
 
 
 @Component
@@ -23,14 +26,17 @@ export default class Map extends Vue {
     private routeLayer?: L.Layer;
     private spotMarkers: L.Marker[] = [];
     private currentLocationMarker: CurrentLocationMarker = new CurrentLocationMarker([0, 0]);
-    private zoomLevelThreshold: number = 19; // とりあえず仮で閾値決めてます
-    private mapIdToDisplay: number = mapViewGetters.rootMapId;
+    private readonly zoomLevelThreshold: number = 19; // とりあえず仮で閾値決めてます
+    private mapViewMutations!: Committer<MapViewMutations>;
+    private mapViewGetters!: MapViewGetters;
 
     /**
      * とりあえず地図の表示を行なっています．
      */
     public mounted() {
-        const rootMapCenter: Coordinate = this.calculateCenter(mapViewGetters.rootMapBounds);
+        this.mapViewMutations = MapViewModule.context(this.$store).mutations;
+        this.mapViewGetters = MapViewModule.context(this.$store).getters;
+        const rootMapCenter: Coordinate = this.calculateCenter(this.mapViewGetters.rootMapBounds);
         this.centerLat = rootMapCenter.lat;
         this.centerLng = rootMapCenter.lng;
         this.map = L.map('map').setView(
@@ -45,7 +51,7 @@ export default class Map extends Vue {
         ).addTo(this.map);
 
         // sampleMapのスポット表示
-        const rootMapSpots: SpotForMap[] = mapViewGetters.getSpotsForMap(mapViewGetters.rootMapId);
+        const rootMapSpots: SpotForMap[] = this.mapViewGetters.getSpotsForMap(this.mapViewGetters.rootMapId);
         this.displaySpotMarkers(rootMapSpots);
 
         // sampleMapのポリゴン表示
@@ -53,7 +59,7 @@ export default class Map extends Vue {
         this.$nextTick().then(() => {
             this.displayPolygons(rootMapSpots);
             // 経路（エッジ）表示
-            this.displayRouteLines(mapViewGetters.getNodesForNavigation([]));
+            this.displayRouteLines(this.mapViewGetters.getNodesForNavigation([]));
             // 経路レイヤーが消去されているか確認
             // this.routeLines = this.displayRouteLines([]);
         });
@@ -102,9 +108,9 @@ export default class Map extends Vue {
     private updateDisplayLevel(): void {
         const currentZoomLevel = this.map.getZoom();
         if (currentZoomLevel >= this.zoomLevelThreshold) {
-            mapViewMutations.setDisplayLevel('detail');
+            this.mapViewMutations.setDisplayLevel('detail');
         } else {
-            mapViewMutations.setDisplayLevel('default');
+            this.mapViewMutations.setDisplayLevel('default');
         }
     }
 
@@ -115,15 +121,15 @@ export default class Map extends Vue {
      */
     private updateIdOfCenterSpotInRootMap(e: L.LeafletEvent): void {
         const centerPos: Coordinate = this.map.getCenter();
-        const mapIndex: number = mapViewGetters.maps.findIndex((m) => m.id === mapViewGetters.rootMapId);
-        const spots: Spot[] = mapViewGetters.maps[mapIndex].spots;
+        const mapIndex: number = this.mapViewGetters.maps.findIndex((m) => m.id === this.mapViewGetters.rootMapId);
+        const spots: Spot[] = this.mapViewGetters.maps[mapIndex].spots;
         const nearestSpotId: number = this.getNearestSpotId(centerPos, spots);
         // 距離のチェック
         const isNear: boolean = this.twoPointsIsNear(centerPos, spots[nearestSpotId].coordinate);
         if (isNear === true) {
-            mapViewMutations.setIdOfCenterSpotInRootMap(nearestSpotId);
+            this.mapViewMutations.setIdOfCenterSpotInRootMap(nearestSpotId);
         } else {
-            mapViewMutations.setNonExistentOfCenterSpotInRootMap();
+            this.mapViewMutations.setNonExistentOfCenterSpotInRootMap();
         }
     }
 
@@ -242,7 +248,7 @@ export default class Map extends Vue {
                 }
             }
         };
-        store.watch(
+        this.$store.watch(
             (state, getters: MapViewGetters) => [
                 getters.displayLevel,
                 getters.idOfCenterSpotInRootMap,
@@ -268,23 +274,23 @@ export default class Map extends Vue {
      * @return 新しく表示するマップのID
      */
     private selectMapToDisplay(): number {
-        const displayLevel: DisplayLevelType = mapViewGetters.displayLevel;
+        const displayLevel: DisplayLevelType = this.mapViewGetters.displayLevel;
         if (displayLevel === 'default') {
-            return mapViewGetters.rootMapId;
+            return this.mapViewGetters.rootMapId;
         }
-        const centerSpotId: number | null = mapViewGetters.idOfCenterSpotInRootMap;
+        const centerSpotId: number | null = this.mapViewGetters.idOfCenterSpotInRootMap;
         if (centerSpotId === null) {
-            return mapViewGetters.rootMapId;
+            return this.mapViewGetters.rootMapId;
         }
-        const centerSpot = { parentMapId: mapViewGetters.rootMapId, spotId: centerSpotId };
-        if (!mapViewGetters.spotHasDetailMaps(centerSpot)) {
-            return mapViewGetters.rootMapId;
+        const centerSpot = { parentMapId: this.mapViewGetters.rootMapId, spotId: centerSpotId };
+        if (!this.mapViewGetters.spotHasDetailMaps(centerSpot)) {
+            return this.mapViewGetters.rootMapId;
         }
-        const lastViewedDetailMapId: number | null = mapViewGetters.getLastViewedDetailMapId(centerSpot);
+        const lastViewedDetailMapId: number | null = this.mapViewGetters.getLastViewedDetailMapId(centerSpot);
         if (lastViewedDetailMapId != null) {
             return lastViewedDetailMapId;
         }
-        const firstFloorMapId: number = mapViewGetters.getSpotById(centerSpot).detailMapIds[0];
-        return firstFloorMapId;
+        const firstDetailMapId: number = this.mapViewGetters.getSpotById(centerSpot).detailMapIds[0];
+        return firstDetailMapId;
     }
 }

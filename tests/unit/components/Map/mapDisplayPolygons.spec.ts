@@ -1,13 +1,14 @@
-import { mapViewGetters, mapViewMutations } from '@/store';
+import Vuex from 'vuex';
 import map from '@/components/Map/index.vue';
-import { MapViewState } from '@/store/types';
 import { FeatureCollection } from 'geojson';
-import { shallowMount } from '@vue/test-utils';
-import { cloneDeep } from 'lodash';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { MockMapViewGetters } from '../../../resources/mockMapViewGetters';
 import { testMapViewState } from '../../../resources/testMapViewState';
 import { GeolocationWrapper } from '@/components/Map/GeolocationWrapper';
+import { createStore, Module } from 'vuex-smart-module';
+import { MapViewState } from '@/store/modules/MapViewModule/MapViewState';
+import { SpotForMap, Spot } from '@/store/types';
 
-const mapViewStateTestData: MapViewState = cloneDeep(testMapViewState);
 
 const expectedGeoJsonObject: FeatureCollection = {
     type: 'FeatureCollection',
@@ -51,17 +52,35 @@ const expectedGeoJsonObject: FeatureCollection = {
 describe('mapコンポーネントのポリゴン表示', () => {
     let wrapper: any;
     beforeEach(() => {
-        // テスト用データをstoreにセット
-        mapViewMutations.setMapViewState(mapViewStateTestData);
+        const localVue = createLocalVue();
+        localVue.use(Vuex);
+        // inject mock
+        const mockModule = new Module({
+            state: MapViewState,
+            getters: MockMapViewGetters,
+        });
+        // create mock store
+        const mockStore = createStore(mockModule);
         GeolocationWrapper.watchPosition = jest.fn();
         wrapper = shallowMount( map, {
+            store: mockStore,
+            localVue,
             attachToDocument: true,
         });
     });
 
     it('storeのgetter(getSpotsForMap)で取得したspotのshape情報をgeoJson形式に変換する', () => {
-        const spotsForMap = mapViewGetters.getSpotsForMap(0);
-        const actualGeoJsonFormat =  wrapper.vm.spotShapeToGeoJson(spotsForMap);
+        const spots: Spot[] | undefined = testMapViewState.maps[0].spots;
+        const spotsForMaps: SpotForMap[] = [];
+        spots.forEach((spot) => {
+            spotsForMaps.push({
+                id: spot.id,
+                name: spot.name,
+                coordinate: spot.coordinate,
+                shape: spot.shape,
+            });
+        });
+        const actualGeoJsonFormat =  wrapper.vm.spotShapeToGeoJson(spotsForMaps);
         const expectedGeoJsonFormat = expectedGeoJsonObject;
         expect(actualGeoJsonFormat).toStrictEqual(expectedGeoJsonFormat);
     });

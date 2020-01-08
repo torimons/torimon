@@ -61,8 +61,8 @@ export class MapViewGetters extends Getters<MapViewState> {
      * @return マップの範囲
      */
     get rootMapBounds(): Bounds {
-        const rootMapIndex: number = this.state.maps.findIndex((m: Map) => m.id === this.state.rootMapId);
-        return this.state.maps[rootMapIndex].bounds;
+        const rootMapIndex: number = this.getters.maps.findIndex((m: Map) => m.id === this.getters.rootMapId);
+        return this.getters.maps[rootMapIndex].bounds;
     }
 
     /**
@@ -72,8 +72,8 @@ export class MapViewGetters extends Getters<MapViewState> {
      * @return Mapコンポーネントが必要なスポットの情報
      */
     public getSpotsForMap(mapId: number): SpotForMap[] {
-        const mapIndex: number = this.state.maps.findIndex((m: Map) => m.id === mapId);
-        const spots: Spot[] = this.state.maps[mapIndex].spots;
+        const mapIndex: number = this.getters.maps.findIndex((m: Map) => m.id === mapId);
+        const spots: Spot[] = this.getters.maps[mapIndex].spots;
         const spotsForMap: SpotForMap[] = [];
         spots.forEach((spot) => {
             spotsForMap.push({
@@ -94,7 +94,7 @@ export class MapViewGetters extends Getters<MapViewState> {
      * @throw SpotNotFoundError 指定されたスポットが見つからない場合に発生
      */
     public getSpotById(targetSpot: {parentMapId: number, spotId: number}): Spot {
-        const map: Map | undefined = this.state.maps.find((m: Map) => m.id === targetSpot.parentMapId);
+        const map: Map | undefined = this.getters.maps.find((m: Map) => m.id === targetSpot.parentMapId);
         if (map === undefined) {
             throw new MapNotFoundError('Map does not found...');
         }

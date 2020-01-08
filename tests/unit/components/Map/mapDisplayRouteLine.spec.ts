@@ -1,16 +1,31 @@
-import { Component, Vue } from 'vue-property-decorator';
-import { mapViewGetters, mapViewMutations } from '@/store';
+import Vuex from 'vuex';
+import { mapViewGetters } from '@/store';
 import map from '@/components/Map/index.vue';
-import { MapViewState, Coordinate, Node } from '@/store/types';
-import { mount, shallowMount } from '@vue/test-utils';
+import { Coordinate } from '@/store/types';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { GeolocationWrapper } from '@/components/Map/GeolocationWrapper.ts';
 import L, { LatLng } from 'leaflet';
+import { createStore, Module } from 'vuex-smart-module';
+import { MockMapViewGetters } from '../../../resources/mockMapViewGetters';
+import { MapViewState } from '@/store/modules/MapViewModule/MapViewState';
 
 describe('mapコンポーネントの経路表示', () => {
     let wrapper: any;
     beforeEach(() => {
+        const localVue = createLocalVue();
+        localVue.use(Vuex);
+        // inject mock
+        const mockModule = new Module({
+            state: MapViewState,
+            getters: MockMapViewGetters,
+        });
+        // create mock store
+        const mockStore = createStore(mockModule);
+        // テスト用データをstoreにセット
         GeolocationWrapper.watchPosition = jest.fn();
         wrapper = shallowMount( map, {
+            store: mockStore,
+            localVue,
             attachToDocument: true,
         });
     });

@@ -2,7 +2,8 @@ import { Mutations } from 'vuex-smart-module';
 import { MapViewState } from './MapViewState';
 import { Map, Spot, DisplayLevelType } from '@/store/types';
 import { NoDetailMapIdInSpotError } from '@/store/errors/NoDetailMapIdInSpotError';
-import { mapViewGetters } from '@/store';
+import { MapNotFoundError } from '@/store/errors/MapNotFoundError';
+import { SpotNotFoundError } from '@/store/errors/SpotNotFoundError';
 
 export class MapViewMutations extends Mutations<MapViewState> {
     /**
@@ -36,7 +37,14 @@ export class MapViewMutations extends Mutations<MapViewState> {
         const detailMapId = payload.detailMapId;
         const parentMapId = payload.parentSpot.parentMapId;
         const spotId = payload.parentSpot.spotId;
-        const spot = mapViewGetters.getSpotById({ parentMapId, spotId });
+        const map: Map | undefined = this.state.maps.find((m: Map) => m.id === parentMapId);
+        if (map === undefined) {
+            throw new MapNotFoundError('Map does not found...');
+        }
+        const spot: Spot | undefined = map.spots.find((s: Spot) => s.id === spotId);
+        if (spot === undefined) {
+            throw new SpotNotFoundError('Spot does not found...');
+        }
         // detailMapIdがそのスポットに存在しない場合，例外を投げる
         if (!spot.detailMapIds.includes(detailMapId)) {
             throw new NoDetailMapIdInSpotError('Detail Map does not exist...');
