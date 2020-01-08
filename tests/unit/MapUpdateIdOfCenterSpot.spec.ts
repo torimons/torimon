@@ -4,7 +4,7 @@ import { Spot, Coordinate } from '@/store/types';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { GeolocationWrapper } from '@/components/Map/GeolocationWrapper';
 import { createStore, Module } from 'vuex-smart-module';
-import { MockMapViewGetters } from '../resources/mockMapViewGetters';
+import { MockMapViewGetters } from '../resources/MockMapViewGetters';
 import { MapViewState } from '@/store/modules/MapViewModule/MapViewState';
 import { testMapViewState } from '../resources/testMapViewState';
 import { MapViewMutations } from '@/store/modules/MapViewModule/MapViewMutations';

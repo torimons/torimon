@@ -2,7 +2,7 @@ import Vuex from 'vuex';
 import map from '@/components/Map/index.vue';
 import { FeatureCollection } from 'geojson';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { MockMapViewGetters } from '../../../resources/mockMapViewGetters';
+import { MockMapViewGetters } from '../../../resources/MockMapViewGetters';
 import { testMapViewState } from '../../../resources/testMapViewState';
 import { GeolocationWrapper } from '@/components/Map/GeolocationWrapper';
 import { createStore, Module } from 'vuex-smart-module';

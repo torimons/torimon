@@ -6,7 +6,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { GeolocationWrapper } from '@/components/Map/GeolocationWrapper.ts';
 import L, { LatLng } from 'leaflet';
 import { createStore, Module } from 'vuex-smart-module';
-import { MockMapViewGetters } from '../../../resources/mockMapViewGetters';
+import { MockMapViewGetters } from '../../../resources/MockMapViewGetters';
 import { MapViewState } from '@/store/modules/MapViewModule/MapViewState';
 
 describe('mapコンポーネントの経路表示', () => {
