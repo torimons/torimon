@@ -17,7 +17,6 @@ describe('components/Map.vue zoomlevel切り替えのテスト', () => {
     let wrapper: any;
 
     beforeEach(() => {
-        // mapViewMutations.setMapViewState(mapViewStoreTestData);
         // storeのモック作成
         const mockModule = new Module({
             state: MapViewState,
