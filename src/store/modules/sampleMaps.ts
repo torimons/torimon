@@ -30,7 +30,7 @@ export const sampleMaps: Map[] =  [
                 detailMapIds: [1, 2],
                 detailMapLevelNames: ['1F', '2F'],
                 lastViewedDetailMapId: null,
-                description: '総合学習プラザです',
+                description: '全学・工学系の共通講義と大学院統合新領域学府オートモーティブサイエンス専攻の教育研究等を行う施設',
             },
             {
                 id: 1,
@@ -63,7 +63,7 @@ export const sampleMaps: Map[] =  [
                 detailMapIds: [3, 4],
                 detailMapLevelNames: ['2F', '3F'],
                 lastViewedDetailMapId: null,
-                description: 'ウエスト2号館です',
+                description: '見どころスポット：フーコーの振り子',
             },
             {
                 id: 2,
@@ -105,10 +105,10 @@ export const sampleMaps: Map[] =  [
                     type: 'Polygon',
                     coordinates: [
                         [
-                            [130.2191823720932,　33.5962698095059],
-                            [130.21931111812592,　33.5962698095059],
-                            [130.21931111812592,　33.596350239426066],
-                            [130.21974563598633,　33.59637704938279],
+                            [130.2191823720932, 33.5962698095059],
+                            [130.21931111812592, 33.5962698095059],
+                            [130.21931111812592, 33.596350239426066],
+                            [130.21974563598633, 33.59637704938279],
                             [130.21982073783872, 33.59615810115904],
                             [130.22070050239563, 33.59619384784579],
                             [130.22162854671478, 33.596461947524084],
@@ -130,7 +130,7 @@ export const sampleMaps: Map[] =  [
                 detailMapIds: [],
                 detailMapLevelNames: [],
                 lastViewedDetailMapId: null,
-                description: 'ウエスト1号館です',
+                description: '理学部棟',
             },
             {
                 id: 4,
@@ -216,7 +216,7 @@ export const sampleMaps: Map[] =  [
                 detailMapIds: [],
                 detailMapLevelNames: [],
                 lastViewedDetailMapId: null,
-                description: '伊都理系図書館です',
+                description: '多様な学習スペースが設けられており，軽食を提供するカフェ(Libca)が併設されています',
             },
         ],
         nodes: [],
