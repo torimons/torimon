@@ -214,21 +214,31 @@ export default class MapView extends Vue {
      * @return geoJson形式のshapeデータ
      */
     private spotShapeToGeoJson(spots: SpotForMap[]): GeoJsonObject {
-        const shapes: Feature[] = [];
-        for (const spot of spots) {
+        const defaultPolygonProperties = {
+            color: '#555555',
+            weight: 2,
+            opacity: 0.1,
+            fillColor: '#555555',
+            fillOpacity: 0.3,
+        };
+        const features: Feature[] = spots.map((spot: SpotForMap) => {
             const shape = spot.shape as GeometryObject;
+            let polygonProperties = defaultPolygonProperties;
+            if (spot.polygonProperty !== undefined) {
+                polygonProperties = spot.polygonProperty;
+            }
             const feature: Feature = {
-                properties: {},
                 type: 'Feature',
                 geometry: shape,
+                properties: polygonProperties,
             };
-            shapes.push(feature);
-        }
-        const features: FeatureCollection = {
+            return feature;
+        });
+        const featureCollection: FeatureCollection = {
             type: 'FeatureCollection',
-            features: shapes,
+            features,
         };
-        return features as GeoJsonObject;
+        return featureCollection as GeoJsonObject;
     }
 
     /**
@@ -242,14 +252,12 @@ export default class MapView extends Vue {
             this.map.removeLayer(this.polygonLayer);
         }
         const shapeGeoJson: GeoJsonObject = this.spotShapeToGeoJson(spotsForDisplay);
+        const styles = (feature: Feature) => {
+            const options = feature.properties;
+            return options as L.PathOptions;
+        };
         this.polygonLayer = new L.GeoJSON(shapeGeoJson, {
-            style: {
-                color: '#555555',
-                weight: 2,
-                opacity: 0.1,
-                fillColor: '#555555',
-                fillOpacity: 0.3,
-            },
+            style: styles as L.PathOptions,
         });
         this.map.addLayer(this.polygonLayer);
     }
