@@ -13,7 +13,15 @@ const expectedGeoJsonObject: FeatureCollection = {
     type: 'FeatureCollection',
     features: [
         {
-            properties: {},
+            // マップデータにpolygonPropertyが指定されている場合、
+            // propertiesには、そのpolygonPropertyが入る。
+            properties: {
+                color: 'primary',
+                weight: 2,
+                opacity: 0.1,
+                fillColor: 'primary',
+                fillOpacity: 0.3,
+            },
             type: 'Feature',
             geometry: {
                 type: 'Polygon',
@@ -29,7 +37,15 @@ const expectedGeoJsonObject: FeatureCollection = {
             },
         },
         {
-            properties: {},
+            // マップデータにpolygonPropertyが指定されていない場合、
+            // propertiesはデフォルトの値が入る。
+            properties: {
+                color: '#555555',
+                weight: 2,
+                opacity: 0.1,
+                fillColor: '#555555',
+                fillOpacity: 0.3,
+            },
             type: 'Feature',
             geometry: {
                 type: 'Polygon',
@@ -65,7 +81,7 @@ describe('mapコンポーネントのポリゴン表示', () => {
         });
     });
 
-    it('storeのgetter(getSpotsForMap)で取得したspotのshape情報をgeoJson形式に変換する', () => {
+    it('getSpotsForMapで取得した情報をgeoJson形式に変換する', () => {
         const spotsForMap = mapViewGetters.getSpotsForMap(0);
         const actualGeoJsonFormat =  wrapper.vm.spotShapeToGeoJson(spotsForMap);
         const expectedGeoJsonFormat = expectedGeoJsonObject;

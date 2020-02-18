@@ -46,6 +46,13 @@ export const testMapViewState: MapViewState = {
                             ],
                         ]],
                     },
+                    polygonProperty: {
+                        color: 'primary',
+                        weight: 2,
+                        opacity: 0.1,
+                        fillColor: 'primary',
+                        fillOpacity: 0.3,
+                    },
                     gateNodeIds: [],
                     detailMapIds: [1, 2],
                     detailMapLevelNames: ['1F', '2F'],
