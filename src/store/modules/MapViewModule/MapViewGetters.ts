@@ -81,6 +81,7 @@ export class MapViewGetters extends Getters<MapViewState> {
                 name: spot.name,
                 coordinate: spot.coordinate,
                 shape: spot.shape,
+                polygonProperty: spot.polygonProperty,
             };
         });
         return spotsForMap;
