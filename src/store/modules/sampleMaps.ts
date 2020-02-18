@@ -26,6 +26,13 @@ export const sampleMaps: Map[] =  [
                         ],
                     ],
                 },
+                polygonProperty: {
+                    color: 'blue',
+                    weight: 2,
+                    opacity: 0.1,
+                    fillColor: 'blue',
+                    fillOpacity: 0.3,
+                },
                 gateNodeIds: [],
                 detailMapIds: [1, 2],
                 detailMapLevelNames: ['1F', '2F'],
