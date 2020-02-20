@@ -214,7 +214,7 @@ export default class MapView extends Vue {
      * @return geoJson形式のshapeデータ
      */
     private spotShapeToGeoJson(spots: SpotForMap[]): GeoJsonObject {
-        const defaultPolygonProperties = {
+        const defaultPolygonProperty = {
             color: '#555555',
             weight: 2,
             opacity: 0.1,
@@ -223,14 +223,14 @@ export default class MapView extends Vue {
         };
         const features: Feature[] = spots.map((spot: SpotForMap) => {
             const shape = spot.shape as GeometryObject;
-            let polygonProperties = defaultPolygonProperties;
+            let polygonProperty = defaultPolygonProperty;
             if (spot.polygonProperty !== undefined) {
-                polygonProperties = spot.polygonProperty;
+                polygonProperty = spot.polygonProperty;
             }
             const feature: Feature = {
                 type: 'Feature',
                 geometry: shape,
-                properties: polygonProperties,
+                properties: polygonProperty,
             };
             return feature;
         });
@@ -252,12 +252,12 @@ export default class MapView extends Vue {
             this.map.removeLayer(this.polygonLayer);
         }
         const shapeGeoJson: GeoJsonObject = this.spotShapeToGeoJson(spotsForDisplay);
-        const styles = (feature: Feature) => {
-            const options = feature.properties;
-            return options as L.PathOptions;
+        const styleOption = (feature: Feature) => {
+            const option = feature.properties;
+            return option as L.PathOptions;
         };
         this.polygonLayer = new L.GeoJSON(shapeGeoJson, {
-            style: styles as L.PathOptions,
+            style: styleOption as L.PathOptions,
         });
         this.map.addLayer(this.polygonLayer);
     }
