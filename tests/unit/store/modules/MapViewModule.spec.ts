@@ -36,7 +36,7 @@ describe('store/modules/MapViewModule.ts', () => {
                 name:     expectedMapViewState.maps[0].spots[0].name,
                 coordinate: expectedMapViewState.maps[0].spots[0].coordinate,
                 shape:    expectedMapViewState.maps[0].spots[0].shape,
-                polygonProperty: expectedMapViewState.maps[0].spots[0].polygonProperty,
+                polygonColor: expectedMapViewState.maps[0].spots[0].polygonColor,
             },
             {
                 mapId: expectedMapViewState.maps[0].id,
@@ -44,7 +44,7 @@ describe('store/modules/MapViewModule.ts', () => {
                 name:     expectedMapViewState.maps[0].spots[1].name,
                 coordinate: expectedMapViewState.maps[0].spots[1].coordinate,
                 shape:    expectedMapViewState.maps[0].spots[1].shape,
-                polygonProperty: expectedMapViewState.maps[0].spots[1].polygonProperty,
+                polygonColor: expectedMapViewState.maps[0].spots[1].polygonColor,
             },
         ];
         expect(actualSpotsForMap).toEqual(expectedSpotsForMap);

@@ -13,8 +13,8 @@ const expectedGeoJsonObject: FeatureCollection = {
     type: 'FeatureCollection',
     features: [
         {
-            // マップデータにpolygonPropertyが指定されている場合、
-            // propertiesには、そのpolygonPropertyが入る。
+            // マップデータにpolygonColorが指定されている場合、
+            // propertiesには、そのpolygonColorが入る。
             properties: {
                 color: 'primary',
                 weight: 2,
@@ -37,8 +37,8 @@ const expectedGeoJsonObject: FeatureCollection = {
             },
         },
         {
-            // マップデータにpolygonPropertyが指定されていない場合、
-            // propertiesはデフォルトの値が入る。
+            // マップデータにpolygonColorが指定されていない場合、
+            // propertiesのcolorにはデフォルトの値が入る。
             properties: {
                 color: '#555555',
                 weight: 2,

@@ -43,7 +43,7 @@ export interface Spot {
      * [GeoJSON フォーマット仕様](https://s.kitazaki.name/docs/geojson-spec-ja.html#id5)
      */
     shape?: Shape;
-    polygonProperty?: PolygonProperty;
+    polygonColor?: string;
     gateNodeIds: number[];
     detailMapIds: number[];
     detailMapLevelNames: string[];
@@ -81,7 +81,7 @@ export interface SpotForMap {
     name: string;
     coordinate: Coordinate;
     shape?: Shape;
-    polygonProperty?: PolygonProperty;
+    polygonColor?: string;
 }
 
 /**
@@ -122,17 +122,6 @@ export interface Edge {
     id: number;
     nodeIds: {A: number, B: number};
     distance: number;
-}
-
-/**
- * ポリゴンの見た目に関する情報を表す型
- */
-export interface PolygonProperty {
-    color: string;
-    weight: number;
-    opacity: number;
-    fillColor: string;
-    fillOpacity: number;
 }
 
 /**
