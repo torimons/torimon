@@ -246,10 +246,7 @@ export default class MapView extends Vue {
             this.map.removeLayer(this.polygonLayer);
         }
         const shapeGeoJson: GeoJsonObject = this.spotShapeToGeoJson(spotsForDisplay);
-        const styleOption = (feature: Feature) => {
-            const option = feature.properties;
-            return option as L.PathOptions;
-        };
+        const styleOption = (feature: Feature) => feature.properties as L.PathOptions;
         this.polygonLayer = new L.GeoJSON(shapeGeoJson, {
             style: styleOption as L.PathOptions,
         });
