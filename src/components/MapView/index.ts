@@ -1,6 +1,6 @@
 import { Component, Vue, Watch} from 'vue-property-decorator';
 import { mapViewGetters, mapViewMutations, store } from '@/store';
-import { SpotForMap, Coordinate, Bounds, Spot, DisplayLevelType } from '@/store/types';
+import { SpotForMap, Coordinate, Bounds, Spot, DisplayLevelType, PolygonProperty } from '@/store/types';
 import 'leaflet/dist/leaflet.css';
 import L, { Marker } from 'leaflet';
 import { GeoJsonObject, GeometryObject, Feature, FeatureCollection } from 'geojson';
@@ -214,7 +214,7 @@ export default class MapView extends Vue {
      * @return geoJson形式のshapeデータ
      */
     private spotShapeToGeoJson(spots: SpotForMap[]): GeoJsonObject {
-        const defaultPolygonProperty = {
+        const defaultPolygonProperty: PolygonProperty = {
             color: '#555555',
             weight: 2,
             opacity: 0.1,
@@ -222,15 +222,10 @@ export default class MapView extends Vue {
             fillOpacity: 0.3,
         };
         const features: Feature[] = spots.map((spot: SpotForMap) => {
-            const shape = spot.shape as GeometryObject;
-            let polygonProperty = defaultPolygonProperty;
-            if (spot.polygonProperty !== undefined) {
-                polygonProperty = spot.polygonProperty;
-            }
             const feature: Feature = {
                 type: 'Feature',
-                geometry: shape,
-                properties: polygonProperty,
+                geometry: spot.shape as GeometryObject,
+                properties: spot.polygonProperty || defaultPolygonProperty,
             };
             return feature;
         });
