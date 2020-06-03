@@ -4,13 +4,13 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class MapDetailCard extends Vue {
 
     private name: string = 'Name section';
-    private description: string = 'Desctiption section'
+    private description: string = 'Desctiption section';
 
     /**
      * closeボタンを押すと詳細画面を閉じる
      */
     private close() {
-        // pass1
+        // pass
     }
 
     /**
