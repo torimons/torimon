@@ -1,7 +1,6 @@
 import { createLocalVue, mount } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Vuetify from 'vuetify';
-import { mapViewGetters, mapViewMutations } from '@/store';
 import MapItem from '@/components/MapItem/index.vue';
 
 describe('MapItemコンポーネントのテスト', () => {
@@ -19,12 +18,13 @@ describe('MapItemコンポーネントのテスト', () => {
             attachToDocument: true,
             propsData: {
                 mapName: 'kyudai',
-                userName: 'unknown',
+                description: 'description of kyudai',
             },
         });
     });
 
-    it.skip('', () => {
-        // do nothing
+    it('親スポットがない場合，スポットの名前と距離が表示される', () => {
+        expect(wrapper.find('.v-list-item__title').text()).toBe('kyudai');
+        expect(wrapper.find('.v-list-item__subtitle').text()).toBe('description of kyudai');
     });
 });

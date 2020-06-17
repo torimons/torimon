@@ -1,9 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import MapList from '@/components/MapList/index.vue';
-import { RawMap } from '@/store/types';
 
-// 現状MapListはEmitの作業しか行っておらずEmitのテストはMapSearchにて行っている為,テストはありません
-// その後の機能追加にてテストが発生する可能性がある
 describe('MapListコンポーネントのテスト', () => {
     let wrapper: any;
 
@@ -17,7 +14,7 @@ describe('MapListコンポーネントのテスト', () => {
         wrapper.destroy();
     });
 
-    it.skip('', () => {
-        // do nothing
+    it.skip('現状MapListはEmitの作業しか行っておらずEmitのテストはMapSearchにて行っている為,テストはありません', () => {
+        // 機能追加によりテストが発生する可能性があり
     });
 });
