@@ -89,7 +89,7 @@ export default class Map {
     /**
      * spotを追加し,追加したspotのparentMapとして自身をセットする.
      * すでに追加済みであれば追加しない.
-     * @param spots 追加するspot
+     * @param spot 追加するspot
      */
     public addSpot(spot: Spot): void {
         if (this.hasSpot(spot)) {

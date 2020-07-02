@@ -20,10 +20,10 @@
             <v-col>
               <v-row justify="end" no-gutters>
                 <EditorToolBar
-                  @clickMove="setEmptyMethodOnMapClick"
+                  @clickMove="setDefaultMethodOnMapClick"
                   @clickZoomIn="zoomIn"
                   @clickZoomOut="zoomOut"
-                  @clickSelect="setEmptyMethodOnMapClick"
+                  @clickSelect="setDefaultMethodOnMapClick"
                   @clickSpot="setAddSpotMethodOnMapClick"
                 />
               </v-row>

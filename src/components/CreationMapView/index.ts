@@ -57,11 +57,11 @@ export default class CreationMapView extends Vue {
     }
 
     /**
-     * マップがクリックされた時に実行されるonMapClick(メソッド型の変数)に何も行わないundefinedを
-     * セットし，クリック時に何も行われないようにする
-     * EditorToolBarコンポーネントでclickSpotイベント以外が発生した時に実行される
+     * マップがクリックされた時に実行されるonMapClick(メソッド型の変数)にデフォルト時（moveモードなど）の挙動を行う
+     * メソッドを登録
+     * EditorToolBarコンポーネントでclickSpotやzoomIn,zoomOutイベントと以外が発生した時に実行される
      */
-    private setEmptyMethodOnMapClick(): void {
+    private setDefaultMethodOnMapClick(): void {
         this.onMapClick = (e: any) => {
             this.spotEditorIsVisible = false;
         };
