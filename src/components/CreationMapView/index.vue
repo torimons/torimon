@@ -5,13 +5,25 @@
         </div>
         <v-container fluid id="toolbar-container">
           <v-row no-gutters>
+            <v-col
+              cols="5"
+              md="3"
+            >
+              <SpotEditor
+                @spotInput="updateFocusedMarkerName"
+                :isVisible="spotEditorIsVisible"
+                @close="spotEditorIsVisible = false"
+                :spot="focusedSpot"
+                @delete="deleteFocusedSpot"
+              />
+            </v-col>
             <v-col>
               <v-row justify="end" no-gutters>
                 <EditorToolBar
-                  @clickMove="setEmptyMethodOnMapClick"
+                  @clickMove="setDefaultMethodOnMapClick"
                   @clickZoomIn="zoomIn"
                   @clickZoomOut="zoomOut"
-                  @clickSelect="setEmptyMethodOnMapClick"
+                  @clickSelect="setDefaultMethodOnMapClick"
                   @clickSpot="setAddSpotMethodOnMapClick"
                 />
               </v-row>

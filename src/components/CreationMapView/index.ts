@@ -1,16 +1,18 @@
 import { Component, Vue } from 'vue-property-decorator';
 import 'leaflet/dist/leaflet.css';
+import { mapViewGetters } from '@/store';
 import L, { LeafletEvent, Marker } from 'leaflet';
 import { Coordinate, SpotType } from '@/store/types';
-import { mapViewGetters } from '@/store';
 import Map from '@/Map/Map.ts';
 import EditorToolBar from '@/components/EditorToolBar/index.vue';
+import SpotEditor from '@/components/SpotEditor/index.vue';
 import Spot from '@/Spot/Spot';
 import SpotMarker from '@/components/MapView/Marker/SpotMarker';
 
 @Component({
     components: {
         EditorToolBar,
+        SpotEditor,
     },
 })
 export default class CreationMapView extends Vue {
@@ -23,11 +25,15 @@ export default class CreationMapView extends Vue {
     });
     // 次にクリックしたときに設置されるスポットタイプ
     private spotTypeToAddNext: SpotType = 'default';
+    private spotEditorIsVisible: boolean = false;
+    private focusedSpot: Spot = new Spot(0, '', { lat: 0, lng: 0});
+    private spotMarkers: SpotMarker[] = [];
 
     /**
      * とりあえず地図の表示を行なっています．
      */
     public mounted() {
+        // マップの範囲選択機能を実装していないので仮の範囲
         const rootMapCenter: Coordinate = Map.calculateCenter(mapViewGetters.rootMap.getBounds());
         this.lMap = L.map('map', {zoomControl: false})
             .setView([rootMapCenter.lat, rootMapCenter.lng], this.defaultZoomLevel);
@@ -51,12 +57,14 @@ export default class CreationMapView extends Vue {
     }
 
     /**
-     * マップがクリックされた時に実行されるonMapClick(メソッド型の変数)に何も行わないundefinedを
-     * セットし，クリック時に何も行われないようにする
-     * EditorToolBarコンポーネントでclickSpotイベント以外が発生した時に実行される
+     * マップがクリックされた時に実行されるonMapClick(メソッド型の変数)にデフォルト時（moveモードなど）の挙動を行う
+     * メソッドを登録
+     * EditorToolBarコンポーネントでclickSpotやzoomIn,zoomOutイベントと以外が発生した時に実行される
      */
-    private setEmptyMethodOnMapClick(): void {
-        this.onMapClick = (e: any) => undefined;
+    private setDefaultMethodOnMapClick(): void {
+        this.onMapClick = (e: any) => {
+            this.spotEditorIsVisible = false;
+        };
     }
 
     /**
@@ -70,11 +78,48 @@ export default class CreationMapView extends Vue {
             .reduce((accum, newValue) => Math.max(accum, newValue), -1);
         const newId = maxNumOfId + 1;
         const newSpot: Spot = new Spot(
-            newId, 'Spot ' + newId, e.latlng, undefined, undefined, undefined, undefined, this.spotTypeToAddNext,
+            newId, 'スポット ' + newId, e.latlng, undefined, undefined, undefined, undefined, this.spotTypeToAddNext,
         );
-        this.map.addSpots([newSpot]);
-        const newMarker: Marker = new SpotMarker(newSpot);
+        this.map.addSpot(newSpot);
+
+        const newMarker: SpotMarker = new SpotMarker(newSpot);
         newMarker.addTo(this.lMap);
+        newMarker.on('click', (event) => this.switchFocusedMarker(event.target));
+        this.spotMarkers.push(newMarker);
+
+        this.switchFocusedMarker(newMarker);
+    }
+
+    /**
+     * 地図上でフォーカスされるマーカーを切り替える
+     * @param newMarker 新しくフォーカスされるマーカー
+     */
+    private switchFocusedMarker(newMarker: SpotMarker): void {
+        const focusedMarker = this.spotMarkers
+            .find(((marker) => marker.getSpot().getId() === this.focusedSpot.getId()));
+        focusedMarker?.setSelected(false);
+        newMarker.setSelected(true);
+        this.focusedSpot = newMarker.getSpot();
+        this.spotEditorIsVisible = true;
+    }
+
+    /**
+     * フォーカスされているスポットをマップから消去する
+     */
+    private deleteFocusedSpot(): void {
+        this.spotEditorIsVisible = false;
+        this.spotMarkers.find((marker) => marker.getSpot().getId() === this.focusedSpot.getId())?.remove();
+        this.spotMarkers = this.spotMarkers
+            .filter((marker) => marker.getSpot().getId() !== this.focusedSpot.getId());
+        this.focusedSpot.getParentMap()?.removeSpot(this.focusedSpot.getId());
+    }
+
+    /**
+     * フォーカスされている地図上のスポットマーカーの名前表示を更新する
+     */
+    private updateFocusedMarkerName(): void {
+        this.spotMarkers
+            .find((marker) => marker.getSpot().getId() === this.focusedSpot.getId())?.addTo(this.lMap);
     }
 
     /**
