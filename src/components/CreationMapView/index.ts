@@ -1,7 +1,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import 'leaflet/dist/leaflet.css';
 import L, { LeafletEvent, Marker } from 'leaflet';
-import { Coordinate, SpotType, EditMode } from '@/store/types';
+import { Coordinate, SpotType, EditMode, EventOnMapCreation } from '@/store/types';
 import { mainCreationViewGetters, mainCreationViewMutations, mainCreationViewStore } from '@/store';
 import Map from '@/Map/Map.ts';
 import EditorToolBar from '@/components/EditorToolBar/index.vue';
@@ -36,10 +36,28 @@ export default class CreationMapView extends Vue {
             },
         ).addTo(this.lMap);
         this.lMap.on('click', (e) => this.onMapClick(e));
+
         mainCreationViewStore.watch(
             (state, getters: MainCreationViewGetters) => getters.editMode,
-            (newSpotType, oldSpotType) => this.onSwitchEditMode(newSpotType),
+            (spotType, oldSpotType) => this.onSwitchEditMode(spotType),
         );
+        mainCreationViewStore.watch(
+            (state, getters: MainCreationViewGetters) => getters.eventLog,
+            (eventLog, oldSpotType) => {
+                if (eventLog.length > 0) {
+                    this.onEventIgnition(eventLog[eventLog.length - 1]);
+                }
+            },
+        );
+    }
+
+    private onEventIgnition(event: EventOnMapCreation): void {
+        if (event === 'zoomIn') {
+            this.zoomIn();
+        }
+        if (event === 'zoomOut') {
+            this.zoomOut();
+        }
     }
 
     private onSwitchEditMode(editMode: EditMode) {
