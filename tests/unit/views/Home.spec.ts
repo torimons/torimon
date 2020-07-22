@@ -1,7 +1,7 @@
 import { createLocalVue, mount } from '@vue/test-utils';
 import router from '@/router';
 import Vuetify from 'vuetify';
-import Home from '@/views/home.vue';
+import Home from '@/views/Home.vue';
 
 describe('ホーム画面のテスト', () => {
     let localVue: any;
