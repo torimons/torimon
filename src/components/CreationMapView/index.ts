@@ -1,4 +1,4 @@
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import 'leaflet/dist/leaflet.css';
 import L, { LeafletEvent, Marker } from 'leaflet';
 import { Coordinate, SpotType, EditMode, EventOnMapCreation } from '@/store/types';
@@ -18,14 +18,14 @@ export default class CreationMapView extends Vue {
     private lMap!: L.Map;
     private defaultZoomLevel: number = 17;
     private tileLayer!: L.TileLayer;
-    private map!: Map;
+    private rootMap!: Map;
     // 次にクリックしたときに設置されるスポットタイプ
 
     /**
      * とりあえず地図の表示を行なっています．
      */
     public mounted() {
-        this.map = creationViewGetters.rootMap;
+        this.rootMap = creationViewGetters.rootMap;
         const rootMapCenter: Coordinate = Map.calculateCenter(creationViewGetters.rootMap.getBounds());
         this.lMap = L.map('map', {zoomControl: false})
             .setView([rootMapCenter.lat, rootMapCenter.lng], this.defaultZoomLevel);
@@ -49,6 +49,10 @@ export default class CreationMapView extends Vue {
                 }
             },
         );
+        creationViewStore.watch(
+            (state, getters: CreationViewGetters) => getters.rootMap,
+            (rootMap, oldRootMap) => this.rootMap = rootMap,
+        );
     }
 
     private onEventIgnition(event: EventOnMapCreation): void {
@@ -67,6 +71,11 @@ export default class CreationMapView extends Vue {
         if (editMode === 'addSpot') {
             this.setAddSpotMethodOnMapClick();
         }
+    }
+
+    @Watch('rootMap', {deep: true})
+    private updateMapTreeView() {
+        creationViewMutations.setRootMap(this.rootMap);
     }
 
     /**
@@ -93,7 +102,7 @@ export default class CreationMapView extends Vue {
      * @param e Leafletイベント(e.latlngを取得するためにany型にしている)
      */
     private addSpot(e: any): void {
-        const maxNumOfId = this.map.getSpots()
+        const maxNumOfId = this.rootMap.getSpots()
             .map((spot) => spot.getId())
             .reduce((accum, newValue) => Math.max(accum, newValue), -1);
         const newId = maxNumOfId + 1;
@@ -104,10 +113,9 @@ export default class CreationMapView extends Vue {
             undefined, undefined, undefined, undefined,
             creationViewGetters.selectedSpotTypeToAdd,
         );
-        this.map.addSpots([newSpot]);
+        this.rootMap.addSpots([newSpot]);
         const newMarker: Marker = new SpotMarker(newSpot);
         newMarker.addTo(this.lMap);
-        creationViewMutations.setRootMap(this.map);
     }
 
     /**
