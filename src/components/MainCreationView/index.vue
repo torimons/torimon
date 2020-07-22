@@ -1,19 +1,12 @@
 <template>
     <div id="main-creation-view">
       <v-app>
-        <div id="map">
-        </div>
+        <CreationMapView/>
         <v-container fluid id="toolbar-container">
           <v-row no-gutters>
             <v-col>
               <v-row justify="end" no-gutters>
-                <EditorToolBar
-                  @clickMove="setEmptyMethodOnMapClick"
-                  @clickZoomIn="zoomIn"
-                  @clickZoomOut="zoomOut"
-                  @clickSelect="setEmptyMethodOnMapClick"
-                  @clickSpot="setAddSpotMethodOnMapClick"
-                />
+                <EditorToolBar/>
               </v-row>
             </v-col>
           </v-row>
@@ -29,10 +22,6 @@
 html,
 body,
 #main-creation-view {
-  height: 100%;
-}
-#map {
-  position: relative;
   height: 100%;
 }
 #toolbar-container {
