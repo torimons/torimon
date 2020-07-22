@@ -134,3 +134,7 @@ export type DisplayLevelType = 'default' | 'detail';
  * restroom: トイレ
  */
 export type SpotType = 'default' | 'withDetailMap' | 'restroom';
+
+export type EditMode = 'move' | 'addSpot';
+
+export type EventOnMapCreation = 'zoomIn' | 'zoomOut';

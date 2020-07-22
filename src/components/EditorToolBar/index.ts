@@ -1,5 +1,6 @@
 import { Component, Vue, Emit } from 'vue-property-decorator';
 import { SpotType } from '@/store/types';
+import { mainCreationViewMutations } from '@/store';
 
 @Component
 export default class EditorToolBar extends Vue {
@@ -10,7 +11,6 @@ export default class EditorToolBar extends Vue {
         {action: 'move',    icon: 'pan_tool', color: this.selectedColor},
         {action: 'zoomIn',  icon: 'zoom_in',  color: this.defaultColor},
         {action: 'zoomOut', icon: 'zoom_out', color: this.defaultColor},
-        {action: 'select',  icon: 'edit',     color: this.defaultColor},
     ];
     private spotButtonColor: string = this.defaultColor;
     private spotIconMaps: Array<{iconName: string, spotType: SpotType}> = [
@@ -33,6 +33,7 @@ export default class EditorToolBar extends Vue {
         if (spotType === undefined) {
             throw new Error('Selected icon name is not found in icon name maps.');
         }
+        mainCreationViewMutations.setSelectedSpotTypeToAdd(spotType.spotType);
         return spotType.spotType;
     }
 
@@ -44,22 +45,20 @@ export default class EditorToolBar extends Vue {
      */
     private onButtonClick(action: Action): void {
         if (action === 'zoomIn') {
-            this.$emit('clickZoomIn');
+            mainCreationViewMutations.addEvent('zoomIn');
             return;
         }
         if (action === 'zoomOut') {
-            this.$emit('clickZoomOut');
+            mainCreationViewMutations.addEvent('zoomOut');
             return;
         }
         this.switchMode(action);
         if (action === 'spot') {
             this.emitSpotType(this.selectedSpotIcon);
+            mainCreationViewMutations.setEditMode('addSpot');
         }
         if (action === 'move') {
-            this.$emit('clickMove');
-        }
-        if (action === 'select') {
-            this.$emit('clickSelect');
+            mainCreationViewMutations.setEditMode('move');
         }
     }
 

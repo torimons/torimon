@@ -2,6 +2,7 @@ import { Mutations } from 'vuex-smart-module';
 import { MainCreationViewState } from './MainCreationViewState';
 import Map from '@/Map/Map.ts';
 import Spot from '@/Spot/Spot.ts';
+import { EditMode, EventOnMapCreation, SpotType } from '@/store/types';
 
 export class MainCreationViewMutations extends Mutations<MainCreationViewState> {
     /**
@@ -23,5 +24,17 @@ export class MainCreationViewMutations extends Mutations<MainCreationViewState> 
         // 応急処置としてundefinedをsetしている
         this.state.focusedSpot = undefined;
         this.state.focusedSpot = newFocusedSpot;
+    }
+
+    public setEditMode(editMode: EditMode): void {
+        this.state.editMode = editMode;
+    }
+
+    public setSelectedSpotTypeToAdd(spotType: SpotType): void {
+        this.state.selectedSpotTypeToAdd = spotType;
+    }
+
+    public addEvent(event: EventOnMapCreation): void {
+        this.state.eventLog.push(event);
     }
 }

@@ -1,6 +1,6 @@
 import { Getters } from 'vuex-smart-module';
 import { MainCreationViewState } from './MainCreationViewState';
-import { RawMap, RawSpot, SpotInfo, SpotForMap, Bounds, DisplayLevelType, Coordinate, Node } from '@/store/types';
+import { EditMode, EventOnMapCreation, SpotType } from '@/store/types';
 import Map from '@/Map/Map.ts';
 import Spot from '@/Spot/Spot.ts';
 
@@ -21,4 +21,15 @@ export class MainCreationViewGetters extends Getters<MainCreationViewState> {
         return this.state.focusedSpot;
     }
 
+    get editMode(): EditMode {
+        return this.state.editMode;
+    }
+
+    get selectedSpotTypeToAdd(): SpotType {
+        return this.state.selectedSpotTypeToAdd;
+    }
+
+    get eventLog(): EventOnMapCreation[] {
+        return this.state.eventLog;
+    }
 }

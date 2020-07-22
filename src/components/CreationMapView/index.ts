@@ -1,12 +1,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 import 'leaflet/dist/leaflet.css';
 import L, { LeafletEvent, Marker } from 'leaflet';
-import { Coordinate, SpotType } from '@/store/types';
-import { mapViewGetters } from '@/store';
+import { Coordinate, SpotType, EditMode } from '@/store/types';
+import { mainCreationViewGetters, mainCreationViewMutations, mainCreationViewStore } from '@/store';
 import Map from '@/Map/Map.ts';
 import EditorToolBar from '@/components/EditorToolBar/index.vue';
 import Spot from '@/Spot/Spot';
 import SpotMarker from '@/components/MapView/Marker/SpotMarker';
+import { MainCreationViewGetters } from '@/store/modules/MainCreationViewModule/MainCreationViewGetters';
 
 @Component({
     components: {
@@ -17,18 +18,15 @@ export default class CreationMapView extends Vue {
     private lMap!: L.Map;
     private defaultZoomLevel: number = 17;
     private tileLayer!: L.TileLayer;
-    private map: Map = new Map(0, 'New Map', {
-        topL: {lat: 0, lng: 0},
-        botR: {lat: 0, lng: 0},
-    });
+    private map!: Map;
     // 次にクリックしたときに設置されるスポットタイプ
-    private spotTypeToAddNext: SpotType = 'default';
 
     /**
      * とりあえず地図の表示を行なっています．
      */
     public mounted() {
-        const rootMapCenter: Coordinate = Map.calculateCenter(mapViewGetters.rootMap.getBounds());
+        this.map = mainCreationViewGetters.rootMap;
+        const rootMapCenter: Coordinate = Map.calculateCenter(mainCreationViewGetters.rootMap.getBounds());
         this.lMap = L.map('map', {zoomControl: false})
             .setView([rootMapCenter.lat, rootMapCenter.lng], this.defaultZoomLevel);
         this.tileLayer = L.tileLayer(
@@ -38,6 +36,19 @@ export default class CreationMapView extends Vue {
             },
         ).addTo(this.lMap);
         this.lMap.on('click', (e) => this.onMapClick(e));
+        mainCreationViewStore.watch(
+            (state, getters: MainCreationViewGetters) => getters.editMode,
+            (newSpotType, oldSpotType) => this.onSwitchEditMode(newSpotType),
+        );
+    }
+
+    private onSwitchEditMode(editMode: EditMode) {
+        if (editMode === 'move') {
+            this.setEmptyMethodOnMapClick();
+        }
+        if (editMode === 'addSpot') {
+            this.setAddSpotMethodOnMapClick();
+        }
     }
 
     /**
@@ -45,9 +56,8 @@ export default class CreationMapView extends Vue {
      * EditorToolBarコンポーネントでclickSpotイベントが発生した時に実行される
      * @param spotType クリックされたスポットの種類 (clickSpotイベントから送られてくる)
      */
-    private setAddSpotMethodOnMapClick(spotType: SpotType): void {
+    private setAddSpotMethodOnMapClick(): void {
         this.onMapClick = this.addSpot;
-        this.spotTypeToAddNext = spotType;
     }
 
     /**
@@ -70,11 +80,16 @@ export default class CreationMapView extends Vue {
             .reduce((accum, newValue) => Math.max(accum, newValue), -1);
         const newId = maxNumOfId + 1;
         const newSpot: Spot = new Spot(
-            newId, 'Spot ' + newId, e.latlng, undefined, undefined, undefined, undefined, this.spotTypeToAddNext,
+            newId,
+            'Spot ' + newId,
+            e.latlng,
+            undefined, undefined, undefined, undefined,
+            mainCreationViewGetters.selectedSpotTypeToAdd,
         );
         this.map.addSpots([newSpot]);
         const newMarker: Marker = new SpotMarker(newSpot);
         newMarker.addTo(this.lMap);
+        mainCreationViewMutations.setRootMap(this.map);
     }
 
     /**

@@ -15,5 +15,5 @@ export const mapViewMutations = MapViewModule.context(store).mutations;
 export const mainCreationViewStore = createStore(
     MainCreationViewModule,
 );
-export const mainCreationViewGetters = MapViewModule.context(store).getters;
-export const mainCreationViewMutations = MapViewModule.context(store).mutations;
+export const mainCreationViewGetters = MainCreationViewModule.context(mainCreationViewStore).getters;
+export const mainCreationViewMutations = MainCreationViewModule.context(mainCreationViewStore).mutations;
