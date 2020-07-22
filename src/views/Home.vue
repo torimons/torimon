@@ -18,13 +18,13 @@
                         </div>
                         <div class="my-2">
                             <router-link to="map-select">
-                                <v-btn color="#3F8373" large>
+                                <v-btn color="primary" large>
                                     <span class="white--text">地図利用</span>
                                 </v-btn>
                             </router-link>
                         </div>
                         <div class="my-2">
-                            <v-btn color="#3F8373" large href="CreationMapView">
+                            <v-btn color="primary" large href="CreationMapView">
                                 <span class="white--text">地図作成</span>
                             </v-btn>
                         </div>
