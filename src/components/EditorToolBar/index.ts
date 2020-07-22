@@ -1,6 +1,6 @@
 import { Component, Vue, Emit } from 'vue-property-decorator';
 import { SpotType } from '@/store/types';
-import { mainCreationViewMutations } from '@/store';
+import { creationViewMutations } from '@/store';
 
 @Component
 export default class EditorToolBar extends Vue {
@@ -33,7 +33,7 @@ export default class EditorToolBar extends Vue {
         if (spotType === undefined) {
             throw new Error('Selected icon name is not found in icon name maps.');
         }
-        mainCreationViewMutations.setSelectedSpotTypeToAdd(spotType.spotType);
+        creationViewMutations.setSelectedSpotTypeToAdd(spotType.spotType);
         return spotType.spotType;
     }
 
@@ -45,20 +45,20 @@ export default class EditorToolBar extends Vue {
      */
     private onButtonClick(action: Action): void {
         if (action === 'zoomIn') {
-            mainCreationViewMutations.addEvent('zoomIn');
+            creationViewMutations.addEvent('zoomIn');
             return;
         }
         if (action === 'zoomOut') {
-            mainCreationViewMutations.addEvent('zoomOut');
+            creationViewMutations.addEvent('zoomOut');
             return;
         }
         this.switchMode(action);
         if (action === 'spot') {
             this.emitSpotType(this.selectedSpotIcon);
-            mainCreationViewMutations.setEditMode('addSpot');
+            creationViewMutations.setEditMode('addSpot');
         }
         if (action === 'move') {
-            mainCreationViewMutations.setEditMode('move');
+            creationViewMutations.setEditMode('move');
         }
     }
 

@@ -1,10 +1,10 @@
 import { Mutations } from 'vuex-smart-module';
-import { MainCreationViewState } from './MainCreationViewState';
+import { CreationViewState } from './MainCreationViewState';
 import Map from '@/Map/Map.ts';
 import Spot from '@/Spot/Spot.ts';
 import { EditMode, EventOnMapCreation, SpotType } from '@/store/types';
 
-export class MainCreationViewMutations extends Mutations<MainCreationViewState> {
+export class CreationViewMutations extends Mutations<CreationViewState> {
     /**
      * 新たにrootMapをsetする
      * @param newRootMap

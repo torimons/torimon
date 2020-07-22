@@ -1,10 +1,10 @@
 import { Getters } from 'vuex-smart-module';
-import { MainCreationViewState } from './MainCreationViewState';
+import { CreationViewState } from './MainCreationViewState';
 import { EditMode, EventOnMapCreation, SpotType } from '@/store/types';
 import Map from '@/Map/Map.ts';
 import Spot from '@/Spot/Spot.ts';
 
-export class MainCreationViewGetters extends Getters<MainCreationViewState> {
+export class CreationViewGetters extends Getters<CreationViewState> {
     /**
      * ルートマップを返す
      * @return ルートマップのインスタンス

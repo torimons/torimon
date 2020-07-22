@@ -2,12 +2,12 @@ import { Component, Vue } from 'vue-property-decorator';
 import 'leaflet/dist/leaflet.css';
 import L, { LeafletEvent, Marker } from 'leaflet';
 import { Coordinate, SpotType, EditMode, EventOnMapCreation } from '@/store/types';
-import { mainCreationViewGetters, mainCreationViewMutations, mainCreationViewStore } from '@/store';
+import { creationViewGetters, creationViewMutations, creationViewStore } from '@/store';
 import Map from '@/Map/Map.ts';
 import EditorToolBar from '@/components/EditorToolBar/index.vue';
 import Spot from '@/Spot/Spot';
 import SpotMarker from '@/components/MapView/Marker/SpotMarker';
-import { MainCreationViewGetters } from '@/store/modules/MainCreationViewModule/MainCreationViewGetters';
+import { CreationViewGetters } from '@/store/modules/MainCreationViewModule/MainCreationViewGetters';
 
 @Component({
     components: {
@@ -25,8 +25,8 @@ export default class CreationMapView extends Vue {
      * とりあえず地図の表示を行なっています．
      */
     public mounted() {
-        this.map = mainCreationViewGetters.rootMap;
-        const rootMapCenter: Coordinate = Map.calculateCenter(mainCreationViewGetters.rootMap.getBounds());
+        this.map = creationViewGetters.rootMap;
+        const rootMapCenter: Coordinate = Map.calculateCenter(creationViewGetters.rootMap.getBounds());
         this.lMap = L.map('map', {zoomControl: false})
             .setView([rootMapCenter.lat, rootMapCenter.lng], this.defaultZoomLevel);
         this.tileLayer = L.tileLayer(
@@ -37,12 +37,12 @@ export default class CreationMapView extends Vue {
         ).addTo(this.lMap);
         this.lMap.on('click', (e) => this.onMapClick(e));
 
-        mainCreationViewStore.watch(
-            (state, getters: MainCreationViewGetters) => getters.editMode,
+        creationViewStore.watch(
+            (state, getters: CreationViewGetters) => getters.editMode,
             (spotType, oldSpotType) => this.onSwitchEditMode(spotType),
         );
-        mainCreationViewStore.watch(
-            (state, getters: MainCreationViewGetters) => getters.eventLog,
+        creationViewStore.watch(
+            (state, getters: CreationViewGetters) => getters.eventLog,
             (eventLog, oldSpotType) => {
                 if (eventLog.length > 0) {
                     this.onEventIgnition(eventLog[eventLog.length - 1]);
@@ -102,12 +102,12 @@ export default class CreationMapView extends Vue {
             'Spot ' + newId,
             e.latlng,
             undefined, undefined, undefined, undefined,
-            mainCreationViewGetters.selectedSpotTypeToAdd,
+            creationViewGetters.selectedSpotTypeToAdd,
         );
         this.map.addSpots([newSpot]);
         const newMarker: Marker = new SpotMarker(newSpot);
         newMarker.addTo(this.lMap);
-        mainCreationViewMutations.setRootMap(this.map);
+        creationViewMutations.setRootMap(this.map);
     }
 
     /**
