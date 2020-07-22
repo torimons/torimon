@@ -1,5 +1,5 @@
 <template>
-    <div id="creation-map-view">
+    <div id="main-creation-view">
       <v-app>
         <div id="map">
         </div>
@@ -28,7 +28,7 @@
 <style scoped>
 html,
 body,
-#creation-map-view {
+#main-creation-view {
   height: 100%;
 }
 #map {

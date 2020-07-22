@@ -13,7 +13,7 @@ import SpotMarker from '@/components/MapView/Marker/SpotMarker';
         EditorToolBar,
     },
 })
-export default class CreationMapView extends Vue {
+export default class MainCreationView extends Vue {
     private lMap!: L.Map;
     private defaultZoomLevel: number = 17;
     private tileLayer!: L.TileLayer;

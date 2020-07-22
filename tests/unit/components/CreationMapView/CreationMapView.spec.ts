@@ -3,7 +3,7 @@ import { shallowMount } from '@vue/test-utils';
 import 'leaflet/dist/leaflet.css';
 import { testRawMapData } from '../../../resources/testRawMapData';
 import EditorToolBar from '@/components/EditorToolBar';
-import CreationMapView from '@/components/CreationMapView';
+import MainCreationView from '@/components/MainCreationView';
 import Map from '@/Map/Map';
 
 
@@ -12,7 +12,7 @@ describe('components/CreationMapView', () => {
 
     beforeEach(() => {
         mapViewMutations.setRootMapForTest(testRawMapData);
-        wrapper = shallowMount(CreationMapView, {
+        wrapper = shallowMount(MainCreationView, {
             attachToDocument: true,
         });
     });
