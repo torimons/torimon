@@ -18,6 +18,16 @@
             </v-col>
           </v-row>
         </v-container>
+        <v-btn @click="isUploadDialogOpen = true">
+            (for test) open dialog
+        </v-btn>
+        <v-container id="upload-dialog-container">
+            <v-dialog v-model="isUploadDialogOpen" width="1000">
+                <UploadDialog :map="map" 
+                  @closeDialog="isUploadDialogOpen = false"
+                />
+            </v-dialog>
+        </v-container>
       </v-app>
     </div>
 </template>
@@ -41,6 +51,9 @@ body,
   top: 0px;
   z-index: 1000;
   pointer-events: none;
+}
+#upload-dialog-container {
+  z-index: 1000;
 }
 
 body {

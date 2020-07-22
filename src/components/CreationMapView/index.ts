@@ -4,13 +4,15 @@ import L, { LeafletEvent, Marker } from 'leaflet';
 import { Coordinate, SpotType } from '@/store/types';
 import { mapViewGetters } from '@/store';
 import Map from '@/Map/Map.ts';
-import EditorToolBar from '@/components/EditorToolBar/index.vue';
 import Spot from '@/Spot/Spot';
+import EditorToolBar from '@/components/EditorToolBar/index.vue';
+import UploadDialog from '@/components/UploadDialog/index.vue';
 import SpotMarker from '@/components/MapView/Marker/SpotMarker';
 
 @Component({
     components: {
         EditorToolBar,
+        UploadDialog,
     },
 })
 export default class CreationMapView extends Vue {
@@ -23,6 +25,7 @@ export default class CreationMapView extends Vue {
     });
     // 次にクリックしたときに設置されるスポットタイプ
     private spotTypeToAddNext: SpotType = 'default';
+    private isUploadDialogOpen: boolean = false;
 
     /**
      * とりあえず地図の表示を行なっています．
