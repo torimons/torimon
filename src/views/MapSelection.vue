@@ -9,6 +9,7 @@
           <v-toolbar-title>Selection Page</v-toolbar-title>
           <v-spacer/>
           <v-btn
+            class="home"
             to="/"
             text
           >

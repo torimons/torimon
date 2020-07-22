@@ -21,12 +21,13 @@
               cols="12"
               lg="8"
             >
-              <h2 class="header--title">Torimon</h2>
-              <div class="header--content">
+              <h2 class="header-title">Torimon</h2>
+              <div class="header-content">
                 <p>Torimonは、地図を自由に作り、そして使うことができるサービスです。</p>
                 <p>自分用の地図を作ったり、他の人が公開した地図を利用することができます。</p>
               </div>
               <v-btn
+                class="use"
                 x-large
                 color="primary"
                 to="/map-select"
@@ -45,8 +46,8 @@
             cols="12"
             class="text-center"
           >
-            <h1 class="main--title">地図を作る</h1>
-            <div class="main--content">
+            <h1 class="main-title">地図を作る</h1>
+            <div class="main-content">
               <v-row>
                 <v-col>
                   <p>自分の好きなように地図を作成してみましょう。</p>
@@ -78,8 +79,8 @@
             cols="12"
             class="text-center"
           >
-            <h1 class="main--title">地図を使う</h1>
-            <div class="main--content">
+            <h1 class="main-title">地図を使う</h1>
+            <div class="main-content">
               <v-row >
                 <v-col>
                   <p>自分で作った地図を使うことも、他の人が公開した地図を使うこともできます。</p>
@@ -110,6 +111,7 @@
         >
           <v-col cols="12" class="text-center">
             <v-btn
+              class="use"
               x-large
               color="primary"
               to="/map-select"
@@ -140,12 +142,12 @@ export default class Home extends Vue {
 </script>
 
 <style scoped>
-.header--title {
+.header-title {
   font-size: 4.5rem;
   margin-bottom: 3rem;
   color: #3F8373;
 }
-.header--content {
+.header-content {
   font-size: 1.5rem;
   margin-bottom: 3rem;
 }
@@ -167,11 +169,11 @@ export default class Home extends Vue {
   background: inherit;
   filter: blur(3px);
 }
-.main--title {
+.main-title {
   font-size: 3rem;
   color: #3F8373;
 }
-.main--content {
+.main-content {
   font-size: 1.3rem;
 }
 </style>
