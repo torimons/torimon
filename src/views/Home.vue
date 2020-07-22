@@ -28,6 +28,25 @@
                                 <span class="white--text">地図作成</span>
                             </v-btn>
                         </div>
+                        <!-- <div class="my-2">
+                             <v-btn
+                                icon
+                                @click="dialog = true"
+                                >
+                                <v-icon>delete</v-icon>
+                            </v-btn>
+                            <v-dialog
+                                v-model="dialog"
+                                width="500"
+                            >
+                            <delete-confirmation-dialog
+                                class="delete-confirmation"
+                                :name="testName"
+                                @del="deleteMap"
+                                @cancel="dialog = false"
+                            ></delete-confirmation-dialog>
+                            </v-dialog>
+                        </div> -->
                     </v-col>
                 </v-row>
             </v-container>
@@ -38,12 +57,15 @@
 <script lang='ts'>
 import { Vue, Component } from 'vue-property-decorator';
 import Menu from '@/components/Menu/index.vue';
+// import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog/index.vue';
 
 @Component({
     components: {
         Menu,
+        // DeleteConfirmationDialog,
     },
 })
 export default class Home extends Vue {
+    // private dialog: boolean = false;
 }
 </script>
