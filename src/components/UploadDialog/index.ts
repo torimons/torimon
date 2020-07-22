@@ -3,7 +3,7 @@ import { store, mapViewGetters, mapViewMutations } from '@/store';
 import Map from '@/Map/Map.ts';
 
 @Component
-export default class MapInformationDialog extends Vue {
+export default class UploadDialog extends Vue {
     @Prop()
     private map!: Map;
 
