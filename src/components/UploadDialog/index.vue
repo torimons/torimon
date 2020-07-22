@@ -7,24 +7,24 @@
             <v-card-text>
                 <v-container>
                     <div>
-                    <v-form v-model='isValidInput'>
-                        <v-text-field
-                            v-model='mapName'
-                            label='地図の名前'
-                            outlined
-                            :rules='mapNameRules'
-                        />
-                        <v-textarea
-                            v-model='mapDescription'
-                            label='地図の説明'
-                            rows="1"
-                            outlined
-                            :rules='mapDescriptionRules'
-                            auto-grow
-                        />
-                    </v-form>
-                </div>
-                <div class="text-center">
+                        <v-form v-model='isValidInput'>
+                            <v-text-field
+                                v-model='mapName'
+                                label='地図の名前'
+                                outlined
+                                :rules='mapNameRules'
+                            />
+                            <v-textarea
+                                v-model='mapDescription'
+                                label='地図の説明'
+                                rows="1"
+                                outlined
+                                :rules='mapDescriptionRules'
+                                auto-grow
+                            />
+                        </v-form>
+                    </div>
+                    <div class="text-center">
                         <v-btn
                             class="ma-2"
                             @click="sendCloseDialog"
