@@ -26,12 +26,14 @@
                     </div>
                     <div class="text-center">
                         <v-btn
+                            id="back"
                             class="ma-2"
                             @click="sendCloseDialog"
                         >
                             編集に戻る
                         </v-btn>
                         <v-btn
+                            id="upload-btn"
                             color="primary"
                             class="ma-2 white--text"
                             @click="upload"

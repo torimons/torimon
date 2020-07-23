@@ -32,12 +32,13 @@ describe('UploadDialogのテスト', () => {
     });
 
     it('編集に戻るボタンを押すとcloseDialogイベントが発火する', () => {
-        // wrapper.find('.v-btn.openMap').trigger('click');
+        wrapper.find('#back').trigger('click');
+        expect(wrapper.emitted().closeDialog).toBeTruthy();
+        expect(wrapper.emitted().closeDialog.length).toBe(1);
     });
 
     it.skip('アップロードボタンを押すと...', () => {
         // TODO:
         // サーバーとの昨日作成後に実装
-        // wrapper.find('.v-btn.openMap').trigger('click');
     });
 });
