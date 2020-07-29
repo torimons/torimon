@@ -13,9 +13,11 @@ export default class UploadDialog extends Vue {
     private loading: boolean = false;
     private mapNameRules = [
         (v: string) => !!v || '地図の名前が必要です',
+        (v: string) => (v && v.length <= 20) || '名前は20文字以内',
     ];
     private mapDescriptionRules = [
         (v: string) => !!v || '地図の説明が必要です',
+        (v: string) => (v && v.length <= 100) || '説明は100文字以内',
     ];
 
     public beforeMount() {

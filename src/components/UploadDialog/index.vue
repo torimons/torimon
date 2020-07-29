@@ -10,13 +10,13 @@
                         <v-form v-model='isValidInput'>
                             <v-text-field
                                 v-model='mapName'
-                                label='地図の名前'
+                                label='地図の名前 (20文字以内)'
                                 outlined
                                 :rules='mapNameRules'
                             />
                             <v-textarea
                                 v-model='mapDescription'
-                                label='地図の説明'
+                                label='地図の説明 (100文字以内)'
                                 rows="1"
                                 outlined
                                 :rules='mapDescriptionRules'
@@ -38,7 +38,7 @@
                             class="ma-2 white--text"
                             @click="upload"
                             :loading="loading"
-                            :disabled="loading"
+                            :disabled="!isValidInput || loading"
                         >
                             アップロード
                             <v-icon right>mdi-cloud-upload</v-icon>
