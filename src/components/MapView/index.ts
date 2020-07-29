@@ -1,4 +1,4 @@
-import { Component, Vue, Watch} from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { mapViewGetters, mapViewMutations, store } from '@/store';
 import { Coordinate, Bounds, DisplayLevelType } from '@/store/types';
 import 'leaflet/dist/leaflet.css';
@@ -11,9 +11,15 @@ import SpotMarker from '@/components/MapView/Marker/SpotMarker';
 import { MapViewGetters } from '@/store/modules/MapViewModule/MapViewGetters';
 import Map from '@/Map/Map.ts';
 import Spot from '@/Spot/Spot';
+import DisplayOsm from '@/components/DisplayOSM/index.vue';
 
 
-@Component
+@Component({
+    components: {
+        DisplayOsm,
+    },
+})
+
 export default class MapView extends Vue {
     private map!: L.Map;
     private defaultZoomLevel: number = 17;
@@ -23,7 +29,6 @@ export default class MapView extends Vue {
     private currentLocationMarker: CurrentLocationMarker = new CurrentLocationMarker([0, 0]);
     private zoomLevelThreshold: number = 19; // とりあえず仮で閾値決めてます
     private mapToDisplay!: Map;
-    private displayOSM: boolean = true;
 
     /**
      * とりあえず地図の表示を行なっています．
@@ -40,7 +45,7 @@ export default class MapView extends Vue {
         ).addTo(this.map);
         this.map.on('zoomend', this.updateDisplayLevel);
         this.map.on('move', this.updateCenterSpotInRootMap);
-        // this.map.zoomControl.setPosition('bottomright');
+        this.map.zoomControl.setPosition('bottomright');
         this.watchStoreForMoveMapCenter();
         this.watchStoreForDisplayMap();
         this.watchFocusedSpotChange();
@@ -336,18 +341,6 @@ export default class MapView extends Vue {
     }
 
     /**
-     * diplayOSMの変更を検知してleafletのmapからtileLayerのON/OFFを行う
-     */
-    @Watch('displayOSM')
-    private onDisplayOSMChange() {
-        if (this.displayOSM) {
-            this.tileLayer.setUrl('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-        } else {
-            this.tileLayer.setUrl('');
-        }
-    }
-
-    /**
      * zoom_inボタンを押した時にzoominする
      */
     private zoomIn() {
@@ -359,5 +352,21 @@ export default class MapView extends Vue {
      */
     private zoomOut() {
         this.map.zoomOut();
+    }
+
+    /**
+     * OSMを表示する
+     * DisplayOSMコンポーネントがOsmOnイベントを発生させた時に実行される
+     */
+    private OsmOn() {
+        this.tileLayer.setUrl('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    }
+
+    /**
+     * OSMを表示しない
+     * DisplayOSMコンポーネントがOsmOffイベントを発生させた時に実行される
+     */
+    private OsmOff() {
+        this.tileLayer.setUrl('');
     }
 }
