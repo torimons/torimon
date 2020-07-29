@@ -5,16 +5,14 @@ export default class MapView extends Vue {
     private tileLayer!: L.TileLayer;
     private displayOsm: boolean = true;
     /**
-     * diplayOsmの変更を検知してleafletのmapからtileLayerのON/OFFを行う
+     * diplayOsmの変更を検知してOSMのON/OFFの切り替えを行う
      */
     @Watch('displayOsm')
-    private onDisplayOSMChange() {
+    private onDisplayOsmChange() {
         if (this.displayOsm) {
             this.$emit('OsmOn');
-            // this.tileLayer.setUrl('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
         } else {
             this.$emit('OsmOff');
-            // this.tileLayer.setUrl('');
         }
     }
 }

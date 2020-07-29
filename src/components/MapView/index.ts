@@ -11,7 +11,7 @@ import SpotMarker from '@/components/MapView/Marker/SpotMarker';
 import { MapViewGetters } from '@/store/modules/MapViewModule/MapViewGetters';
 import Map from '@/Map/Map.ts';
 import Spot from '@/Spot/Spot';
-import DisplayOsm from '@/components/DisplayOSM/index.vue';
+import DisplayOsm from '@/components/DisplayOsm/index.vue';
 
 
 @Component({
@@ -45,7 +45,6 @@ export default class MapView extends Vue {
         ).addTo(this.map);
         this.map.on('zoomend', this.updateDisplayLevel);
         this.map.on('move', this.updateCenterSpotInRootMap);
-        this.map.zoomControl.setPosition('bottomright');
         this.watchStoreForMoveMapCenter();
         this.watchStoreForDisplayMap();
         this.watchFocusedSpotChange();
