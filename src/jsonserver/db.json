@@ -1,6 +1,7 @@
 {
     "maps": [
         {
+            "_id": "abcdefg",
             "id": 0,
             "name": "九州大学",
             "bounds": {
@@ -203,6 +204,7 @@
             ]
         },
         {
+            "_id": "abcdefg1",
             "id": 1,
             "name": "総合学習プラザ",
             "bounds": {
@@ -218,6 +220,7 @@
             "description": "総合学習プラザの地図データです"
         },
         {
+            "_id": "abcdefg2",
             "id": 2,
             "name": "ウェスト2号館",
             "bounds": {

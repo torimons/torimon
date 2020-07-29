@@ -16,6 +16,7 @@ export default class Map {
 
     private parentSpot: Spot | undefined = undefined;
     private spots: Spot[] = [];
+    private _id: string | undefined;
 
     constructor(
         private id: number,
@@ -32,6 +33,14 @@ export default class Map {
      */
     public getId(): number {
         return this.id;
+    }
+
+    /**
+     * db用の固有idを返す
+     * @return _id: db用のid
+     */
+    public getDBId(): string | undefined {
+        return this._id;
     }
 
     /**
@@ -72,6 +81,15 @@ export default class Map {
      */
     public getParentSpot(): Spot | undefined {
         return this.parentSpot;
+    }
+
+    /**
+     * mongodbから与えられた固有idをセットする
+     * (コンストラクタで渡すと変更箇所が多く影響範囲が多いためsettreを用意)
+     * @param _id: db用の固有id
+     */
+    public setDBId(_id: string) {
+        this._id = _id;
     }
 
     /**
