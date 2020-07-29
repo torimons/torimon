@@ -356,7 +356,7 @@ export default class MapView extends Vue {
 
     /**
      * OSMを表示する
-     * DisplayOSMコンポーネントがOsmOnイベントを発生させた時に実行される
+     * DisplayOsmコンポーネントがOsmOnイベントを発生させた時に実行される
      */
     private OsmOn() {
         this.tileLayer.setUrl('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
@@ -364,7 +364,7 @@ export default class MapView extends Vue {
 
     /**
      * OSMを表示しない
-     * DisplayOSMコンポーネントがOsmOffイベントを発生させた時に実行される
+     * DisplayOsmコンポーネントがOsmOffイベントを発生させた時に実行される
      */
     private OsmOff() {
         this.tileLayer.setUrl('');

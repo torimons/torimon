@@ -5,7 +5,7 @@ export default class MapView extends Vue {
     private tileLayer!: L.TileLayer;
     private displayOsm: boolean = true;
     /**
-     * diplayOSMの変更を検知してleafletのmapからtileLayerのON/OFFを行う
+     * diplayOsmの変更を検知してleafletのmapからtileLayerのON/OFFを行う
      */
     @Watch('displayOsm')
     private onDisplayOSMChange() {
