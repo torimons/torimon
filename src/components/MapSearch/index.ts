@@ -33,7 +33,6 @@ export default class MapSearch extends Vue {
         this.loading = false;
         // 最初は全結果を表示
         this.mapSearchResults = this.targetMaps;
-        console.log(this.mapSearchResults);
     }
 
     /**
