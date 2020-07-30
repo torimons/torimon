@@ -7,6 +7,14 @@
       >
         <v-toolbar>
           <v-toolbar-title>Selection Page</v-toolbar-title>
+          <v-spacer/>
+          <v-btn
+            class="home"
+            to="/"
+            text
+          >
+            <v-icon left>home</v-icon>home
+          </v-btn>
         </v-toolbar>
         <v-container id="search-bar" class="pt-0" fluid>
           <v-row>
