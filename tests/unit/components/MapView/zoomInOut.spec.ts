@@ -1,5 +1,6 @@
 import { mapViewMutations } from '@/store';
 import { shallowMount } from '@vue/test-utils';
+import { GeolocationWrapper } from '@/components/MapView/GeolocationWrapper';
 import 'leaflet/dist/leaflet.css';
 import { testRawMapData } from '../../../resources/testRawMapData';
 import MapView from '@/components/MapView';
@@ -11,8 +12,15 @@ describe('components/MapView', () => {
 
     beforeEach(() => {
         mapViewMutations.setRootMapForTest(testRawMapData);
+        GeolocationWrapper.watchPosition = jest.fn();
+        const initMapDisplay = jest.fn();
+        const watchStoreForDisplayMap = jest.fn();
         wrapper = shallowMount(MapView, {
             attachToDocument: true,
+            methods: {
+                initMapDisplay,
+                watchStoreForDisplayMap
+            },
         });
     });
 
@@ -22,16 +30,16 @@ describe('components/MapView', () => {
     });
 
     it('zoomInボタンを押すとzoomLevelが大きくなる', () => {
-        // // ZoomInボタンのclickイベント発火
-        // wrapper.vm.zoomIn();
-        // const actualZoomLevel: number = wrapper.vm.lMap.getZoom();
-        // expect(actualZoomLevel).toBeGreaterThan(17);
+        const defaultZoomlevel: number = wrapper.vm.defaultZoomLevel;
+        wrapper.vm.zoomIn();
+        const actualZoomLevel: number = wrapper.vm.map.getZoom();
+        expect(actualZoomLevel).toBeGreaterThan(defaultZoomlevel);
     });
 
     it('zoomOutボタンを押すとzoomLevelが小さくなる', () => {
-        // // ZoomOutボタンのclickイベント発火
-        // wrapper.vm.zoomOut();
-        // const actualZoomLevel: number = wrapper.vm.lMap.getZoom();
-        // expect(actualZoomLevel).toBeLessThan(17);
+        const defaultZoomlevel: number = wrapper.vm.defaultZoomLevel;
+        wrapper.vm.zoomOut();
+        const actualZoomLevel: number = wrapper.vm.map.getZoom();
+        expect(actualZoomLevel).toBeLessThan(defaultZoomlevel);
     });
 });
