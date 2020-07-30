@@ -21,7 +21,7 @@ describe('components/DisplayOsm', () => {
         wrapper.destroy();
     });
 
-    it('displayOsmをwatchしてonDisplayOsmChangeを呼び出す', () => {
+    it('displayOsmの変更を検知してON/OFFを切り替える', () => {
         // 初めはTrue
         wrapper.vm.displayOSM = false;
         expect(wrapper.emitted().osmOff).toBeTruthy();
