@@ -1,8 +1,8 @@
 <template>
     <div id='map'>
-        <DisplayOsm
-        @OsmOn="OsmOn"
-        @OsmOff="OsmOff"
+        <DisplayOSM
+        @osmOn="osmOn"
+        @osmOff="osmOff"
         />
         <v-btn id="zoom-in"
             absolute

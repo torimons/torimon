@@ -1,15 +1,15 @@
 <template>
-    <div id='map'>
+    <div id='displayOSM'>
         <v-btn id="osm"
             absolute
             bottom
             right
             fab
             small
-            @click="displayOsm = !displayOsm"
+            @click="displayOSM = !displayOSM"
         >
             <v-icon
-                v-if="displayOsm"
+                v-if="displayOSM"
             >
                 visibility_off
             </v-icon>
@@ -29,7 +29,7 @@
 <style scoped>
 html,
 body,
-#map {
+#displayOSM {
     height: 100%;
 }
 #osm {

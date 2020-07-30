@@ -11,12 +11,12 @@ import SpotMarker from '@/components/MapView/Marker/SpotMarker';
 import { MapViewGetters } from '@/store/modules/MapViewModule/MapViewGetters';
 import Map from '@/Map/Map.ts';
 import Spot from '@/Spot/Spot';
-import DisplayOsm from '@/components/DisplayOsm/index.vue';
+import DisplayOSM from '@/components/DisplayOSM/index.vue';
 
 
 @Component({
     components: {
-        DisplayOsm,
+        DisplayOSM,
     },
 })
 
@@ -357,7 +357,7 @@ export default class MapView extends Vue {
      * OSMを表示する
      * DisplayOsmコンポーネントがOsmOnイベントを発生させた時に実行される
      */
-    private OsmOn() {
+    private osmOn() {
         this.tileLayer.setUrl('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
     }
 
@@ -365,7 +365,7 @@ export default class MapView extends Vue {
      * OSMを表示しない
      * DisplayOsmコンポーネントがOsmOffイベントを発生させた時に実行される
      */
-    private OsmOff() {
+    private osmOff() {
         this.tileLayer.setUrl('');
     }
 }

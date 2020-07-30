@@ -1,18 +1,18 @@
 import { Component, Vue, Watch} from 'vue-property-decorator';
 
 @Component
-export default class MapView extends Vue {
+export default class DisplayOSM extends Vue {
     private tileLayer!: L.TileLayer;
-    private displayOsm: boolean = true;
+    private displayOSM: boolean = true;
     /**
      * diplayOsmの変更を検知してOSMのON/OFFの切り替えを行う
      */
-    @Watch('displayOsm')
+    @Watch('displayOSM')
     private onDisplayOsmChange() {
-        if (this.displayOsm) {
-            this.$emit('OsmOn');
+        if (this.displayOSM) {
+            this.$emit('osmOn');
         } else {
-            this.$emit('OsmOff');
+            this.$emit('osmOff');
         }
     }
 }
