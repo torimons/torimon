@@ -29,7 +29,7 @@ export class CreationViewGetters extends Getters<CreationViewState> {
         return this.state.selectedSpotTypeToAdd;
     }
 
-    get eventLog(): EventOnMapCreation[] {
-        return this.state.eventLog;
+    get eventList(): EventOnMapCreation[] {
+        return this.state.eventList;
     }
 }

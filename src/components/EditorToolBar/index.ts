@@ -1,90 +1,96 @@
-import { Component, Vue, Emit } from 'vue-property-decorator';
-import { SpotType } from '@/store/types';
-import { creationViewMutations } from '@/store';
+import { Component, Vue, Emit, Watch } from 'vue-property-decorator';
+import { SpotType, EditMode, spotIconNames, SpotIconName } from '@/store/types';
+import { creationViewMutations, creationViewStore } from '@/store';
+import { CreationViewGetters } from '@/store/modules/MainCreationViewModule/MainCreationViewGetters';
 
 @Component
 export default class EditorToolBar extends Vue {
-    // 色は仮
-    private selectedColor: string = 'indigo darken-4';
-    private defaultColor: string = 'light-blue lighten-1';
-    private buttons: Array<{ action: Action, icon: string, color: string }> = [
-        {action: 'move',    icon: 'pan_tool', color: this.selectedColor},
-        {action: 'zoomIn',  icon: 'zoom_in',  color: this.defaultColor},
-        {action: 'zoomOut', icon: 'zoom_out', color: this.defaultColor},
+    private selectedColor: string = '#264F45';
+    private defaultColor: string = '#76978F';
+    private buttonColorMap: Array<{mode: EditMode, color: string}> = [
+        { mode: 'move', color: this.selectedColor },
+        { mode: 'addSpot', color: this.defaultColor },
     ];
-    private spotButtonColor: string = this.defaultColor;
-    private spotIconMaps: Array<{iconName: string, spotType: SpotType}> = [
-        { iconName: 'place',        spotType: 'default' },
-        { iconName: 'add_location', spotType: 'withDetailMap' },
-        { iconName: 'wc',           spotType: 'restroom' },
-    ];
-    private selectedMode: Action = 'move';
-    private selectedSpotIcon: string = '';
-    private fabVisible: boolean = false;
+    private spotIconNames = spotIconNames;
+    private editMode: EditMode = 'move';
+    private selectedSpotIcon: SpotIconName = spotIconNames.general;
+    private speedDialContentsIsVisible: boolean = false;
+
+    public mounted() {
+        // vuexのeditModeの更新を監視し本コンポーネントに反映
+        creationViewStore.watch(
+            (state, getters: CreationViewGetters) => getters.editMode,
+            (editMode, oldEditMode) => this.editMode = editMode,
+        );
+    }
 
     /**
-     * スポットボタンがクリックされた時にCreationMapViewにスポットの
-     * SpotTypeをEmitするメソッド
-     * @param selectedSpotIcon クリックで選ばれたスポットのSpotType
+     * editModeの更新を監視し，vuexに反映する
+     * @param editMode Watch対象である本クラスのメンバ変数
      */
-    @Emit('clickSpot')
-    private emitSpotType(selectedSpotIconName: string): SpotType {
-        const spotType = this.spotIconMaps.find((map) => map.iconName === selectedSpotIconName);
+    @Watch('editMode')
+    private setEditMode(editMode: EditMode): void {
+        creationViewMutations.setEditMode(editMode);
+    }
+
+    /**
+     * ボタンの色を取得する
+     * @param editMode 色を取得したいボタンの編集モード
+     */
+    private getButtonColor(editMode: EditMode): string {
+        const color = this.buttonColorMap.find((entry) => entry.mode === editMode)?.color;
+        if (color === undefined) {
+            throw new Error('The buttonColorMap does not contain ' + editMode);
+        }
+        return color;
+    }
+
+    /**
+     * 移動ボタンが押された際に呼び出される
+     */
+    private onClickMoveButton(): void {
+        this.updateStatus('move');
+    }
+
+    /**
+     * 拡大ボタンが押された際に呼び出される
+     */
+    private onClickZoomIn(): void {
+        creationViewMutations.addEvent('zoomIn');
+    }
+
+    /**
+     * 縮小ボタンが押された際に呼び出される
+     */
+    private onClickZoomOut(): void {
+        creationViewMutations.addEvent('zoomOut');
+    }
+
+    /**
+     * スポット追加ボタンが押された際に呼び出される
+     */
+    private onClickSpotAddButton(icon: SpotIconName): void {
+        const spotType: SpotType | undefined = Object.entries(spotIconNames)
+            .filter(([key, value]) => value === icon)
+            .map(([key, value]) => key as SpotType)
+            .pop();
         if (spotType === undefined) {
             throw new Error('Selected icon name is not found in icon name maps.');
         }
-        creationViewMutations.setSelectedSpotTypeToAdd(spotType.spotType);
-        return spotType.spotType;
-    }
-
-    /**
-     * ツールバーの各ボタンがクリックされた場合に実行される
-     * CreationMapViewに選択されたボタンの種類をemitする
-     * また現在選択されているボタンをモードとして保持する
-     * @param action 選択されたボタンの種類
-     */
-    private onButtonClick(action: Action): void {
-        if (action === 'zoomIn') {
-            creationViewMutations.addEvent('zoomIn');
-            return;
-        }
-        if (action === 'zoomOut') {
-            creationViewMutations.addEvent('zoomOut');
-            return;
-        }
-        this.switchMode(action);
-        if (action === 'spot') {
-            this.emitSpotType(this.selectedSpotIcon);
-            creationViewMutations.setEditMode('addSpot');
-        }
-        if (action === 'move') {
-            creationViewMutations.setEditMode('move');
-        }
-    }
-
-    /**
-     * 選択されているボタンの情報をモードとしてメンバ変数に反映する
-     * ボタンの選択情報を色に反映する
-     */
-    private switchMode(action: Action): void {
-        this.selectedMode = action;
-        this.spotButtonColor = this.defaultColor;
-        this.buttons.forEach((b) => b.color = this.defaultColor);
-        if (action === 'spot') {
-            this.spotButtonColor = this.selectedColor;
-        } else {
-            const index = this.buttons.findIndex((b) => b.action === action);
-            this.buttons[index].color = this.selectedColor;
-        }
-    }
-
-    /**
-     * 選択されているスポットアイコンがどのスポットかをセットする
-     */
-    private setSelectedSpotIcon(icon: string): void {
         this.selectedSpotIcon = icon;
+        creationViewMutations.setSelectedSpotTypeToAdd(spotType);
+        this.updateStatus('addSpot');
     }
 
+    /**
+     * 選択されている編集モード情報を更新
+     * ボタンの選択情報を色に反映する
+     * @param editMode 新しい編集モード
+     */
+    private updateStatus(editMode: EditMode): void {
+        this.editMode = editMode;
+        this.buttonColorMap.forEach((entry) => entry.color = this.defaultColor);
+        const index = this.buttonColorMap.findIndex((entry) => entry.mode === editMode);
+        this.buttonColorMap[index].color = this.selectedColor;
+    }
 }
-
-export type Action = 'move' | 'zoomIn' | 'zoomOut' | 'select' | 'spot';

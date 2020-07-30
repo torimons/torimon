@@ -19,10 +19,10 @@ export default class CreationMapView extends Vue {
     private defaultZoomLevel: number = 17;
     private tileLayer!: L.TileLayer;
     private rootMap!: Map;
-    // 次にクリックしたときに設置されるスポットタイプ
 
     /**
-     * とりあえず地図の表示を行なっています．
+     * vuexの地図データを元に表示
+     * vuexで管理されているイベントの発生状態や地図データの監視を行う
      */
     public mounted() {
         this.rootMap = creationViewGetters.rootMap;
@@ -35,17 +35,13 @@ export default class CreationMapView extends Vue {
                 maxNativeZoom: 19,
             },
         ).addTo(this.lMap);
-        this.lMap.on('click', (e) => this.onMapClick(e));
+        this.lMap.on('click', (e: L.LeafletMouseEvent) => this.onMapClick(e));
 
         creationViewStore.watch(
-            (state, getters: CreationViewGetters) => getters.editMode,
-            (spotType, oldSpotType) => this.onSwitchEditMode(spotType),
-        );
-        creationViewStore.watch(
-            (state, getters: CreationViewGetters) => getters.eventLog,
-            (eventLog, oldSpotType) => {
-                if (eventLog.length > 0) {
-                    this.onEventIgnition(eventLog[eventLog.length - 1]);
+            (state, getters: CreationViewGetters) => getters.eventList,
+            (eventList, oldEventList) => {
+                if (eventList.length > 0) {
+                    this.fireEvent(eventList[eventList.length - 1]);
                 }
             },
         );
@@ -55,7 +51,21 @@ export default class CreationMapView extends Vue {
         );
     }
 
-    private onEventIgnition(event: EventOnMapCreation): void {
+    /**
+     * 地図データの変更をvuexに反映
+     */
+    @Watch('rootMap', {deep: true})
+    private updateMapTreeView(): void {
+        creationViewMutations.setRootMap(this.rootMap);
+    }
+
+    /**
+     * イベントを実行
+     * - zoomIn  マップ表示の拡大
+     * - zoomOut マップ表示の縮小
+     * @param event イベント
+     */
+    private fireEvent(event: EventOnMapCreation): void {
         if (event === 'zoomIn') {
             this.zoomIn();
         }
@@ -64,44 +74,29 @@ export default class CreationMapView extends Vue {
         }
     }
 
-    private onSwitchEditMode(editMode: EditMode) {
+    /**
+     * マップをクリックしたときに実行される
+     * vuexで管理されている現在の編集モードによって中身が切り替わる
+     * - move: 移動モード
+     * - addSpot: スポット追加モード
+     * @param e Leafletマウスイベント
+     */
+    private onMapClick = (e: L.LeafletMouseEvent) => {
+        const editMode: EditMode  = creationViewGetters.editMode;
         if (editMode === 'move') {
-            this.setEmptyMethodOnMapClick();
+            return;
         }
         if (editMode === 'addSpot') {
-            this.setAddSpotMethodOnMapClick();
+            this.addSpot(e);
         }
-    }
-
-    @Watch('rootMap', {deep: true})
-    private updateMapTreeView() {
-        creationViewMutations.setRootMap(this.rootMap);
-    }
-
-    /**
-     * マップがクリックされた時に実行されるonMapClick(メソッド型の変数)にaddSpotメソッドを代入
-     * EditorToolBarコンポーネントでclickSpotイベントが発生した時に実行される
-     * @param spotType クリックされたスポットの種類 (clickSpotイベントから送られてくる)
-     */
-    private setAddSpotMethodOnMapClick(): void {
-        this.onMapClick = this.addSpot;
-    }
-
-    /**
-     * マップがクリックされた時に実行されるonMapClick(メソッド型の変数)に何も行わないundefinedを
-     * セットし，クリック時に何も行われないようにする
-     * EditorToolBarコンポーネントでclickSpotイベント以外が発生した時に実行される
-     */
-    private setEmptyMethodOnMapClick(): void {
-        this.onMapClick = (e: any) => undefined;
     }
 
     /**
      * スポットを作成しマーカーをL.Mapに追加する
      * 作成するスポットのIDは既存のスポットのIDの中から最も大きい数値+1の値
-     * @param e Leafletイベント(e.latlngを取得するためにany型にしている)
+     * @param e Leafletマウスイベント
      */
-    private addSpot(e: any): void {
+    private addSpot(e: L.LeafletMouseEvent): void {
         const maxNumOfId = this.rootMap.getSpots()
             .map((spot) => spot.getId())
             .reduce((accum, newValue) => Math.max(accum, newValue), -1);
@@ -133,12 +128,4 @@ export default class CreationMapView extends Vue {
     private zoomOut() {
         this.lMap.zoomOut();
     }
-
-    /**
-     * マップをクリックしたときに実行される
-     * EditorToolBarからEmitされるイベントによって中身が切り替わる
-     * デフォルトでは何もしない(undefined)
-     * @param e Leafletイベント(addSpotメソッドでe.latlngを取得するためにany型にしている)
-     */
-    private onMapClick: (e: any) => void = (e: any) => undefined;
 }

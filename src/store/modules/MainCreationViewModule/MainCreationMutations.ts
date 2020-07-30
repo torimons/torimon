@@ -35,6 +35,6 @@ export class CreationViewMutations extends Mutations<CreationViewState> {
     }
 
     public addEvent(event: EventOnMapCreation): void {
-        this.state.eventLog.push(event);
+        this.state.eventList.push(event);
     }
 }

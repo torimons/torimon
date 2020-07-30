@@ -1,4 +1,4 @@
-import { Coordinate, Shape, SpotType } from '@/store/types.ts';
+import { Coordinate, Shape, SpotType, spotIconNames } from '@/store/types.ts';
 import Map from '@/Map/Map.ts';
 
 export default class Spot {
@@ -89,7 +89,7 @@ export default class Spot {
      */
     public getType(): SpotType {
         if (this.type === undefined) {
-            return 'default';
+            return 'general';
         }
         return this.type;
     }
@@ -99,12 +99,7 @@ export default class Spot {
      * @return アイコン名, 存在しない場合'place'アイコン
      */
     public getIconName(): string {
-        const iconNameMaps: Array<{ key: SpotType, iconName: string }> = [
-            { key: 'default',       iconName: 'place' },
-            { key: 'withDetailMap', iconName: 'add_location' },
-            { key: 'restroom',      iconName: 'wc' },
-        ];
-        const iconName = iconNameMaps.find((iconNameMap) => iconNameMap.key === this.getType())?.iconName;
+        const iconName = spotIconNames[this.getType()];
         if (iconName === undefined) {
             throw new Error('Illegal implements of "iconNameMaps".');
         }

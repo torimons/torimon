@@ -76,7 +76,7 @@ describe('Spotクラスのgetterのテスト', () => {
         const testSpot
             = new Spot(1, 'testMap', testCoord, undefined, 'testFloorName', undefined, undefined, undefined);
         const actualSpotType: SpotType = testSpot.getType();
-        const expectedSpotType = 'default';
+        const expectedSpotType: SpotType = 'general';
         expect(actualSpotType).toEqual(expectedSpotType);
     });
 

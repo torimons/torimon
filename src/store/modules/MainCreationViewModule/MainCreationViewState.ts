@@ -12,7 +12,7 @@ export class CreationViewState {
 
     public editMode: EditMode = 'move';
 
-    public selectedSpotTypeToAdd: SpotType = 'default';
+    public selectedSpotTypeToAdd: SpotType = 'general';
 
-    public eventLog: EventOnMapCreation[] = [];
+    public eventList: EventOnMapCreation[] = [];
 }
