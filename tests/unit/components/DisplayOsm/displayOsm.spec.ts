@@ -2,7 +2,7 @@ import { mapViewMutations } from '@/store';
 import { shallowMount } from '@vue/test-utils';
 import 'leaflet/dist/leaflet.css';
 import { testRawMapData } from '../../../resources/testRawMapData';
-import DisplayOsm from '@/components/Displayosm';
+import DisplayOSM from '@/components/DisplayOSM';
 import Map from '@/Map/Map';
 
 
@@ -11,7 +11,7 @@ describe('components/DisplayOsm', () => {
 
     beforeEach(() => {
         mapViewMutations.setRootMapForTest(testRawMapData);
-        wrapper = shallowMount(DisplayOsm, {
+        wrapper = shallowMount(DisplayOSM, {
             attachToDocument: true,
         });
     });
@@ -22,7 +22,10 @@ describe('components/DisplayOsm', () => {
     });
 
     it('displayOsmをwatchしてonDisplayOsmChangeを呼び出す', () => {
-        
+        // 初めはTrue
+        wrapper.vm.displayOSM = false;
+        expect(wrapper.emitted().osmOff).toBeTruthy();
+        wrapper.vm.displayOSM = true;
+        expect(wrapper.emitted().osmOn).toBeTruthy();
     });
-
 });
