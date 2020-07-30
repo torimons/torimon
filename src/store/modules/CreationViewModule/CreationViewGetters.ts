@@ -1,5 +1,5 @@
 import { Getters } from 'vuex-smart-module';
-import { CreationViewState } from './MainCreationViewState';
+import { CreationViewState } from './CreationViewState';
 import { EditMode, EventOnMapCreation, SpotType } from '@/store/types';
 import Map from '@/Map/Map.ts';
 import Spot from '@/Spot/Spot.ts';

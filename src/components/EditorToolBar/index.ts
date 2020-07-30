@@ -1,7 +1,7 @@
 import { Component, Vue, Emit, Watch } from 'vue-property-decorator';
 import { SpotType, EditMode, spotIconNames, SpotIconName } from '@/store/types';
 import { creationViewMutations, creationViewStore } from '@/store';
-import { CreationViewGetters } from '@/store/modules/MainCreationViewModule/MainCreationViewGetters';
+import { CreationViewGetters } from '@/store/modules/CreationViewModule/CreationViewGetters';
 
 @Component
 export default class EditorToolBar extends Vue {
@@ -75,7 +75,7 @@ export default class EditorToolBar extends Vue {
             .map(([key, value]) => key as SpotType)
             .pop();
         if (spotType === undefined) {
-            throw new Error('Selected icon name is not found in icon name maps.');
+            throw new Error('Selected icon name is not found.');
         }
         this.selectedSpotIcon = icon;
         creationViewMutations.setSelectedSpotTypeToAdd(spotType);

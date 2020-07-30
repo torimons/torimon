@@ -1,7 +1,7 @@
 import { Module } from 'vuex-smart-module';
-import { CreationViewState } from './MainCreationViewState';
-import { CreationViewGetters } from './MainCreationViewGetters';
-import { CreationViewMutations } from './MainCreationMutations';
+import { CreationViewState } from './CreationViewState';
+import { CreationViewGetters } from './CreationViewGetters';
+import { CreationViewMutations } from './CreationViewMutations';
 
 export const CreationViewModule = new Module({
     state: CreationViewState,
