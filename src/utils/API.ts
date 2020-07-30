@@ -3,8 +3,7 @@ import Map from '@/Map/Map.ts';
 import MapDataConverter from './MapDataConverter';
 
 export default class API {
-    private apiUrl: string = 'https://localhost/:3000/maps';
-
+    private apiUrl: string = 'http://localhost:3000/maps';
     /**
      * apiから全マップを取得する
      */

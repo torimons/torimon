@@ -4,16 +4,8 @@ import { mapViewGetters } from '@/store';
 import SearchBox from '@/components/SearchBox/index.vue';
 import Search from '@/utils/Search';
 import MapList from '@/components/MapList/index.vue';
-
-// 地図データが用意されるまで、モックデータを検索結果として利用
-const mockMaps: Map[] = [
-    mapViewGetters.rootMap,
-    new Map(1, 'mock1', {topL: {lat: 0, lng: 0}, botR: {lat: 0, lng: 0}}, undefined, 'desctiption of mock 1'),
-    new Map(2, 'mock2', {topL: {lat: 0, lng: 0}, botR: {lat: 0, lng: 0}}, undefined, 'desctiption of mock 2'),
-    new Map(3, 'mock3', {topL: {lat: 0, lng: 0}, botR: {lat: 0, lng: 0}}, undefined, 'desctiption of mock 3'),
-    new Map(4, 'mock4', {topL: {lat: 0, lng: 0}, botR: {lat: 0, lng: 0}}, undefined, 'desctiption of mock 4'),
-    new Map(5, 'mock5', {topL: {lat: 0, lng: 0}, botR: {lat: 0, lng: 0}}, undefined, 'desctiption of mock 5'),
-];
+import MapDataConverter from '@/utils/MapDataConverter';
+import API from '@/utils/API';
 
 @Component({
     components: {
@@ -23,17 +15,25 @@ const mockMaps: Map[] = [
 })
 export default class MapSearch extends Vue {
     private searchWord: string = '';
-    private mapListIsVisible: boolean = false;
+    private getDataSucceeded: boolean = false;
     private targetMaps: Map[] = [];
-    // 地図データが用意されるまで、モックデータを検索結果として利用
-    private mapSearchResults: Map[] = mockMaps;
-    // private mapSearchResults: Map[] = [];
+    private mapSearchResults: Map[] = [];
     private search!: Search<Map>;
     private backgroundColor: 'transparent' | 'white' = 'transparent';
+    private api: API = new API();
+    private loading: boolean = true;
 
-    public mounted() {
-        // マップのテストデータが出来次第searchクラスのインスタンスに渡す
-        // this.search = new Search(this.targetMaps);
+    public async mounted() {
+        (await this.api.getAllMaps())
+            .map((map) => {
+                this.targetMaps = this.targetMaps.concat(map);
+                this.getDataSucceeded = true;
+            });
+        this.search = new Search<Map>(this.targetMaps);
+        this.loading = false;
+        // 最初は全結果を表示
+        this.mapSearchResults = this.targetMaps;
+        console.log(this.mapSearchResults);
     }
 
     /**
@@ -49,8 +49,16 @@ export default class MapSearch extends Vue {
      */
     @Watch('searchWord')
     public searchMap(): void {
-        this.mapListIsVisible = true;
-        // SearchクラスがMapに対応するまでは使用不可.
-        // this.mapSearchResults = this.search.searchMaps(this.searchWord);
+        // 検索を✕ボタンでclearした場合は全データ表示
+        if (this.searchWord === null) {
+            this.mapSearchResults = this.targetMaps;
+            return;
+        }
+        // 検索ワードが空の場合は全データ表示
+        if (this.searchWord.length === 0) {
+            this.mapSearchResults = this.targetMaps;
+        } else {
+            this.mapSearchResults = this.search.search(this.searchWord);
+        }
     }
 }
