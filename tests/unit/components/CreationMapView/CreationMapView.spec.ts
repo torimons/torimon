@@ -38,7 +38,7 @@ describe('components/CreationMapView', () => {
 
     it('addSpotにより新しいスポットがmapに追加される', () => {
         const map: Map = wrapper.vm.map;
-        expect(map.getSpots().length).toBe(0);
+        expect(map.getSpots().length).toBe(0); //エラーあり
         const e = { latlng: { lat: 0, lng: 0 } };
         wrapper.vm.addSpot(e);
         expect(map.getSpots().length).toBe(1);
@@ -63,7 +63,7 @@ describe('components/CreationMapView', () => {
         // という手順でテストする．
         const expectBounds: Bounds = wrapper.vm.lMap.getBounds();
         // 適当に移動を行う
-        wrapper.vm.map.fire('move');
+        wrapper.vm.map.fire('move'); //エラーあり
         // リセットボタンのclickイベント発火
         wrapper.find(EditorToolBar).vm.$emit('clickReset');
         const actualZoomLevel: number = wrapper.vm.lMap.getZoom();
