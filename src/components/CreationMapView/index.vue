@@ -18,6 +18,17 @@
             </v-col>
           </v-row>
         </v-container>
+        <v-btn
+          color="secondary"
+          fab
+          small
+          dark
+          id="reset-location"
+          v-show="flyToMapBoundsButtonIsVisible"
+          @clickReset="flyToMapBounds"
+        >
+          <v-icon>my_location</v-icon>
+        </v-btn>
       </v-app>
     </div>
 </template>
@@ -41,6 +52,14 @@ body,
   top: 0px;
   z-index: 1000;
   pointer-events: none;
+}
+
+#reset-location {
+  position: absolute;
+  z-index: 1100;
+  pointer-events: auto;
+  bottom: 3%;
+  right: 2%;
 }
 
 body {
