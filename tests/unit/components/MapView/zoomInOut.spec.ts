@@ -19,7 +19,7 @@ describe('components/MapView', () => {
             attachToDocument: true,
             methods: {
                 initMapDisplay,
-                watchStoreForDisplayMap
+                watchStoreForDisplayMap,
             },
         });
     });
