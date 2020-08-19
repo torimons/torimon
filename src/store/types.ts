@@ -130,7 +130,7 @@ export type DisplayLevelType = 'default' | 'detail';
 
 /**
  * ### スポットの種別
- * - default
+ * - general
  *     - 汎用スポット
  * - withDetailMap
  *     - 詳細マップ持ちスポット
@@ -142,8 +142,9 @@ export const spotIconNames = {
     withDetailMap: 'add_location',
     restroom: 'wc',
 } as const;
-export type SpotIconName = typeof spotIconNames[keyof typeof spotIconNames];
+
 export type SpotType = keyof typeof spotIconNames;
+export type SpotIconName = typeof spotIconNames[SpotType];
 
 export type EditMode = 'move' | 'addSpot';
 

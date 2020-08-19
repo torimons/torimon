@@ -29,7 +29,7 @@ export default class EditorToolBar extends Vue {
      * @param editMode Watch対象である本クラスのメンバ変数
      */
     @Watch('editMode')
-    private setEditMode(editMode: EditMode): void {
+    private updateEditMode(editMode: EditMode): void {
         creationViewMutations.setEditMode(editMode);
     }
 
@@ -68,6 +68,7 @@ export default class EditorToolBar extends Vue {
 
     /**
      * スポット追加ボタンが押された際に呼び出される
+     * @param クリックされたスポット追加ボタンのスポット名前
      */
     private onClickSpotAddButton(icon: SpotIconName): void {
         const spotType: SpotType | undefined = Object.entries(spotIconNames)

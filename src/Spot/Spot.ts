@@ -85,7 +85,7 @@ export default class Spot {
 
     /**
      * スポットのtypeを返す
-     * @return スポットのtype, undefinedの場合'default'を返す
+     * @return スポットのtype, undefinedの場合'general'を返す
      */
     public getType(): SpotType {
         if (this.type === undefined) {
