@@ -1,6 +1,6 @@
 <template>
     <div id='map'>
-        <DisplayOSM
+        <OSMToggleButton
         @osmOn="osmOn"
         @osmOff="osmOff"
         />

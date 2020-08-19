@@ -1,7 +1,7 @@
 import { Component, Vue, Watch} from 'vue-property-decorator';
 
 @Component
-export default class DisplayOSM extends Vue {
+export default class OSMToggleButton extends Vue {
     private tileLayer!: L.TileLayer;
     private displayOSM: boolean = true;
     /**

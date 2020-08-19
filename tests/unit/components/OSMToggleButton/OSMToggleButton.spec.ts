@@ -2,16 +2,16 @@ import { mapViewMutations } from '@/store';
 import { shallowMount } from '@vue/test-utils';
 import 'leaflet/dist/leaflet.css';
 import { testRawMapData } from '../../../resources/testRawMapData';
-import DisplayOSM from '@/components/DisplayOSM';
+import OSMToggleButton from '@/components/OSMToggleButton';
 import Map from '@/Map/Map';
 
 
-describe('components/DisplayOsm', () => {
+describe('components/OSMToggleButton', () => {
     let wrapper: any;
 
     beforeEach(() => {
         mapViewMutations.setRootMapForTest(testRawMapData);
-        wrapper = shallowMount(DisplayOSM, {
+        wrapper = shallowMount(OSMToggleButton, {
             attachToDocument: true,
         });
     });
