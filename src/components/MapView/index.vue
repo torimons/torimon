@@ -1,8 +1,8 @@
 <template>
     <div id='map'>
         <OSMToggleButton
-        @osmOn="osmOn"
-        @osmOff="osmOff"
+            @osmOn="osmOn"
+            @osmOff="osmOff"
         />
         <v-btn id="zoom-in"
             absolute

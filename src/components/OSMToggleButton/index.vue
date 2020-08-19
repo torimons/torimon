@@ -7,6 +7,7 @@
             fab
             small
             @click="displayOSM = !displayOSM"
+            @dblclick.stop=";"
         >
             <v-icon
                 v-if="displayOSM"
