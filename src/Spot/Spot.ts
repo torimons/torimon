@@ -10,11 +10,11 @@ export default class Spot {
             private id: number,
             private name: string,
             private coordinate: Coordinate,
+            private type?: SpotType,
             private shape?: Shape,
             private floorName?: string,
             private description?: string,
-            private attachment?: [{name: string, url: string}],
-            private type?: SpotType ) {
+            private attachment?: [{name: string, url: string}] ) {
         /* 何もしない */
     }
 

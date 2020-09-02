@@ -105,7 +105,6 @@ export default class CreationMapView extends Vue {
             newId,
             'Spot ' + newId,
             e.latlng,
-            undefined, undefined, undefined, undefined,
             creationViewGetters.selectedSpotTypeToAdd,
         );
         this.rootMap.addSpots([newSpot]);
