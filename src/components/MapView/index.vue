@@ -11,6 +11,7 @@
             fab
             small
             @click="zoomIn"
+            @dblclick.stop=";"
         >
             <v-icon>zoom_in</v-icon>
         </v-btn>
@@ -21,6 +22,7 @@
             fab
             small
             @click="zoomOut"
+            @dblclick.stop=";"
         >
             <v-icon>zoom_out</v-icon>
         </v-btn>

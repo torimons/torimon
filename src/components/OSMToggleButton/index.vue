@@ -1,5 +1,4 @@
 <template>
-    <div id='displayOSM'>
         <v-btn id="osm"
             absolute
             bottom
@@ -30,15 +29,8 @@
 <style scoped>
 html,
 body,
-#displayOSM {
-    height: 100%;
-}
 #osm {
     bottom: 120px;
     z-index: 1000;
-}
-body {
-    margin: 0;
-    height: 100%;
 }
 </style>
