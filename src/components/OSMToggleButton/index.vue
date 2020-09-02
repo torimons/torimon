@@ -1,25 +1,24 @@
 <template>
-        <v-btn id="osm"
-            absolute
-            bottom
-            right
-            fab
-            small
-            @click="displayOSM = !displayOSM"
-            @dblclick.stop=";"
+    <v-btn id="osm"
+        absolute
+        bottom
+        right
+        fab
+        small
+        @click="displayOSM = !displayOSM"
+        @dblclick.stop=";"
+    >
+        <v-icon
+            v-if="displayOSM"
         >
-            <v-icon
-                v-if="displayOSM"
-            >
-                visibility_off
-            </v-icon>
-            <v-icon
-                v-else
-            >
-                visibility
-            </v-icon>
-        </v-btn>
-    </div>
+            visibility_off
+        </v-icon>
+        <v-icon
+            v-else
+        >
+            visibility
+        </v-icon>
+    </v-btn>
 </template>
 
 <script lang='ts' src='./index.ts'/>
