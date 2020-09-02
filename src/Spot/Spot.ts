@@ -96,12 +96,13 @@ export default class Spot {
 
     /**
      * スポットのアイコン名を返す
-     * @return アイコン名, 存在しない場合'place'アイコン
+     * @return アイコン名.スポットタイプがundefinedの場合は'place'アイコンを返す
+     * @throw Error SpotTypeに対応するアイコン名が存在しない場合
      */
     public getIconName(): string {
         const iconName = spotIconNames[this.getType()];
         if (iconName === undefined) {
-            throw new Error('Illegal implements of "iconNameMaps".');
+            throw new Error('Illegal implements of "spotIconNames".');
         }
         return iconName;
     }
