@@ -43,6 +43,17 @@ export default class Spot {
     }
 
     /**
+     * スポットのtypeを返す
+     * @return スポットのtype, undefinedの場合'general'を返す
+     */
+    public getType(): SpotType {
+        if (this.type === undefined) {
+            return 'general';
+        }
+        return this.type;
+    }
+
+    /**
      * スポットの図形情報を返す
      * @return 図形情報
      */
@@ -81,17 +92,6 @@ export default class Spot {
      */
     public getAttachment(): [{name: string, url: string}] | undefined {
         return this.attachment;
-    }
-
-    /**
-     * スポットのtypeを返す
-     * @return スポットのtype, undefinedの場合'general'を返す
-     */
-    public getType(): SpotType {
-        if (this.type === undefined) {
-            return 'general';
-        }
-        return this.type;
     }
 
     /**
