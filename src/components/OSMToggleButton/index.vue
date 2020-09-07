@@ -1,5 +1,5 @@
 <template>
-    <v-btn id="osm"
+    <v-btn
         absolute
         bottom
         right
@@ -26,10 +26,4 @@
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
-html,
-body,
-#osm {
-    bottom: 120px;
-    z-index: 1000;
-}
 </style>

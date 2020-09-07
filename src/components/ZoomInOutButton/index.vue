@@ -1,5 +1,5 @@
 <template>
-    <div id='zoomInOut'>
+    <div id="zoom-btn-container">
         <v-btn id="zoom-in"
             absolute
             bottom
@@ -32,12 +32,15 @@
 <style scoped>
 html,
 body,
+#zoom-btn-container {
+    position: absolute;
+}
 #zoom-in {
-    bottom: 120px;
+    bottom: 50px;
     z-index: 1000;
 }
 #zoom-out {
-    bottom: 120px;
+    bottom: 0px;
     z-index: 1000;
 }
 </style>

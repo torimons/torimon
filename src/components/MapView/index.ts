@@ -12,11 +12,13 @@ import { MapViewGetters } from '@/store/modules/MapViewModule/MapViewGetters';
 import Map from '@/Map/Map.ts';
 import Spot from '@/Spot/Spot';
 import OSMToggleButton from '@/components/OSMToggleButton/index.vue';
+import ZoomInOutButton from '@/components/ZoomInOutButton/index.vue';
 
 
 @Component({
     components: {
         OSMToggleButton,
+        ZoomInOutButton,
     },
 })
 

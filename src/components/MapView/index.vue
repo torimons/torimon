@@ -1,31 +1,13 @@
 <template>
     <div id='map'>
-        <OSMToggleButton
+        <OSMToggleButton id="osm"
             @osmOn="osmOn"
             @osmOff="osmOff"
         />
-        <v-btn id="zoom-in"
-            absolute
-            bottom
-            right
-            fab
-            small
-            @click="zoomIn"
-            @dblclick.stop=";"
-        >
-            <v-icon>zoom_in</v-icon>
-        </v-btn>
-        <v-btn id="zoom-out"
-            absolute
-            bottom
-            right
-            fab
-            small
-            @click="zoomOut"
-            @dblclick.stop=";"
-        >
-            <v-icon>zoom_out</v-icon>
-        </v-btn>
+        <ZoomInOutButton id="zoom-btn-container"
+            @zoomIn="zoomIn"
+            @zoomOut="zoomOut"
+        />
     </div>
 </template>
 
@@ -39,13 +21,13 @@ body,
 #map {
     height: 100%;
 }
-#zoom-in {
-    bottom: 70px;
+#osm {
+    bottom: 120px;
     z-index: 1000;
 }
-#zoom-out {
+#zoom-btn-container{
     bottom: 20px;
-    z-index: 1000;
+    right: 0px;
 }
 body {
     margin: 0;
