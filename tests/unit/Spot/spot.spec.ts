@@ -6,21 +6,21 @@ describe('Spotクラスのgetterのテスト', () => {
     const testCoord = { lat: 0, lng: 0 };
 
     it('getIdのテスト', () => {
-        const testSpot = new Spot(1, 'testMap', testCoord, undefined, 'testFloorName');
+        const testSpot = new Spot(1, 'testMap', testCoord, undefined, undefined, 'testFloorName');
         const actualSpotId: number = testSpot.getId();
         const expectedSpotId = 1;
         expect(actualSpotId).toEqual(expectedSpotId);
     });
 
     it('getNameのテスト', () => {
-        const testSpot = new Spot(1, 'testMap', testCoord, undefined, 'testFloorName');
+        const testSpot = new Spot(1, 'testMap', testCoord, undefined, undefined, 'testFloorName');
         const actualSpotName: string = testSpot.getName();
         const expectedSpotName = 'testMap';
         expect(actualSpotName).toEqual(expectedSpotName);
     });
 
     it('getCoordinateのテスト', () => {
-        const testSpot = new Spot(1, 'testMap', testCoord, undefined, 'testFloorName');
+        const testSpot = new Spot(1, 'testMap', testCoord, undefined, undefined, 'testFloorName');
         const actualSpotCoord: Coordinate = testSpot.getCoordinate();
         const expectedSpotCoord = testCoord;
         expect(actualSpotCoord).toEqual(expectedSpotCoord);
@@ -38,21 +38,21 @@ describe('Spotクラスのgetterのテスト', () => {
                 ],
             ],
         };
-        const testSpot = new Spot(1, 'testMap', testCoord, testShape, 'testFloorName');
+        const testSpot = new Spot(1, 'testMap', testCoord, undefined, testShape, 'testFloorName');
         const actualSpotShape: Shape | undefined = testSpot.getShape();
         const expectedSpotShape = testShape;
         expect(actualSpotShape).toEqual(expectedSpotShape);
     });
 
     it('shapeが初期化されていない場合，getShapeがundefinedを返す', () => {
-        const testSpot = new Spot(1, 'testMap', testCoord, undefined, 'testFloorName');
+        const testSpot = new Spot(1, 'testMap', testCoord, undefined, undefined, 'testFloorName');
         const actualSpotShape: Shape | undefined = testSpot.getShape();
         const expectedSpotShape = undefined;
         expect(actualSpotShape).toEqual(expectedSpotShape);
     });
 
     it('getFloorNameでfloorNameを取得する', () => {
-        const testSpot = new Spot(1, 'testMap', testCoord, undefined, 'testFloorName');
+        const testSpot = new Spot(1, 'testMap', testCoord, undefined, undefined, 'testFloorName');
         const actualFloorName = testSpot.getFloorName();
         expect(actualFloorName).toBe('testFloorName');
     });
@@ -66,7 +66,7 @@ describe('Spotクラスのgetterのテスト', () => {
 
     it('getTypeのテスト', () => {
         const testSpot
-            = new Spot(1, 'testMap', testCoord, undefined, 'testFloorName', undefined, undefined, 'restroom');
+            = new Spot(1, 'testMap', testCoord, 'restroom', undefined, 'testFloorName');
         const actualSpotType: SpotType = testSpot.getType();
         const expectedSpotType = 'restroom';
         expect(actualSpotType).toEqual(expectedSpotType);
@@ -74,15 +74,15 @@ describe('Spotクラスのgetterのテスト', () => {
 
     it('SpotTypeがundefinedのとき、getTypeが"default"を返す', () => {
         const testSpot
-            = new Spot(1, 'testMap', testCoord, undefined, 'testFloorName', undefined, undefined, undefined);
+            = new Spot(1, 'testMap', testCoord, undefined, undefined, 'testFloorName');
         const actualSpotType: SpotType = testSpot.getType();
-        const expectedSpotType = 'default';
+        const expectedSpotType: SpotType = 'general';
         expect(actualSpotType).toEqual(expectedSpotType);
     });
 
     it('getIconNameのテスト', () => {
         const testSpot
-            = new Spot(1, 'testMap', testCoord, undefined, 'testFloorName', undefined, undefined, 'restroom');
+            = new Spot(1, 'testMap', testCoord, 'restroom', undefined, 'testFloorName', undefined, undefined);
         const actualIconName: string = testSpot.getIconName();
         const expectedIconName = 'wc';
         expect(actualIconName).toEqual(expectedIconName);

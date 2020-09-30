@@ -39,27 +39,27 @@ describe('Spotクラスの詳細マップ登録のテスト', () => {
     });
 
     it('登録済みmapは重複して登録しない', () => {
-        const testSpot: Spot = new Spot(0, 'testSpot', testCoord, undefined, undefined, undefined, undefined);
+        const testSpot: Spot = new Spot(0, 'testSpot', testCoord);
         const testDetailMaps = [];
         for (let i = 0; i < 5; i++) {
-            testDetailMaps.push(new Map(i, 'testMap', testBounds, undefined));
+            testDetailMaps.push(new Map(i, 'testMap', testBounds));
         }
-        const mapDuplicated: Map = new Map(0, 'testMap', testBounds, undefined);
+        const mapDuplicated: Map = new Map(0, 'testMap', testBounds);
         testDetailMaps.push(mapDuplicated);
         testSpot.addDetailMaps(testDetailMaps);
         expect((testSpot as any).detailMaps).toStrictEqual(testDetailMaps);
     });
 
     it('spotにdetialMapを登録する際に,detailMapのparentSpotとして自身をセットする', () => {
-        const testSpot: Spot = new Spot(0, 'testSpot', testCoord, undefined, undefined, undefined, undefined);
-        const testMap: Map = new Map(0, 'testMap', testBounds, undefined);
+        const testSpot: Spot = new Spot(0, 'testSpot', testCoord);
+        const testMap: Map = new Map(0, 'testMap', testBounds);
         testSpot.addDetailMaps([testMap]);
         expect((testMap as any).parentSpot).toStrictEqual(testSpot);
     });
 
     it('detailMapが登録済みかどうかをhasDetailMapにより判定する', () => {
-        const testSpot: Spot = new Spot(0, 'testSpot', testCoord, undefined, undefined, undefined, undefined);
-        const testMap: Map = new Map(0, 'testMap', testBounds, undefined);
+        const testSpot: Spot = new Spot(0, 'testSpot', testCoord);
+        const testMap: Map = new Map(0, 'testMap', testBounds);
         // 登録前の判定
         expect(testSpot.hasDetailMap(testMap)).toBe(false);
         // 登録後の判定

@@ -1,5 +1,5 @@
 import { RawMap } from '@/store/types';
-import { testMapViewState3 } from '../../../resources/testMapViewState3';
+import { testMapViewState3 } from '../../../../resources/testMapViewState3';
 import Map from '@/Map/Map.ts';
 import Spot from '@/Spot/Spot.ts';
 import { createMapInstance, createSpotInstance, initMap } from '@/store/modules/MapViewModule/MapViewState';
