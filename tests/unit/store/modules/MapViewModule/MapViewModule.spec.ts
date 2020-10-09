@@ -3,7 +3,7 @@ import { initMap } from '@/store/modules/MapViewModule/MapViewState';
 import { MapViewState, RawMap, Bounds, SpotInfo, SpotForMap, RawSpot, DisplayLevelType } from '@/store/types';
 import Map from '@/Map/Map.ts';
 import Spot from '@/Spot/Spot.ts';
-import { testRawMapData } from '../../../resources/testRawMapData';
+import { testRawMapData } from '../../../../resources/testRawMapData';
 import { cloneDeep } from 'lodash';
 import { NoDetailMapsError } from '@/store/errors/NoDetailMapsError';
 import { MapNotFoundError } from '@/store/errors/MapNotFoundError';

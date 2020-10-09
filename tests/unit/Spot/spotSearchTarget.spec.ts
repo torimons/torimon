@@ -12,6 +12,7 @@ describe('Spotの検索対象文字列のテスト', () => {
             },
             undefined,
             undefined,
+            undefined,
             'this is a comment for description test',
         );
     const testSpot = new Spot(2, 'testSpot', {lat: 0, lng: 0});

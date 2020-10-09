@@ -129,8 +129,23 @@ export interface Edge {
 export type DisplayLevelType = 'default' | 'detail';
 
 /**
- * スポットの種別
- * withDetailMap: 詳細マップ持ちスポット
- * restroom: トイレ
+ * ### スポットの種別
+ * - general
+ *     - 汎用スポット
+ * - withDetailMap
+ *     - 詳細マップ持ちスポット
+ * - restroom
+ *     - トイレ
  */
-export type SpotType = 'default' | 'withDetailMap' | 'restroom';
+export const spotIconNames = {
+    general: 'place',
+    withDetailMap: 'add_location',
+    restroom: 'wc',
+} as const;
+
+export type SpotType = keyof typeof spotIconNames;
+export type SpotIconName = typeof spotIconNames[SpotType];
+
+export type EditMode = 'move' | 'addSpot';
+
+export type EventOnMapCreation = 'zoomIn' | 'zoomOut';
