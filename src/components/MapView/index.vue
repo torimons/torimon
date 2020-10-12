@@ -1,6 +1,13 @@
 <template>
     <div id='map'>
-        map
+        <OSMToggleButton id="osm"
+            @osmOn="osmOn"
+            @osmOff="osmOff"
+        />
+        <ZoomInOutButton id="zoom-btn-container"
+            @zoomIn="zoomIn"
+            @zoomOut="zoomOut"
+        />
     </div>
 </template>
 
@@ -13,6 +20,14 @@ html,
 body,
 #map {
     height: 100%;
+}
+#osm {
+    bottom: 120px;
+    z-index: 1000;
+}
+#zoom-btn-container{
+    bottom: 20px;
+    right: 0px;
 }
 body {
     margin: 0;

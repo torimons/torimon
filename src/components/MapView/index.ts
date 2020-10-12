@@ -11,9 +11,17 @@ import SpotMarker from '@/components/MapView/Marker/SpotMarker';
 import { MapViewGetters } from '@/store/modules/MapViewModule/MapViewGetters';
 import Map from '@/Map/Map.ts';
 import Spot from '@/Spot/Spot';
+import OSMToggleButton from '@/components/OSMToggleButton/index.vue';
+import ZoomInOutButton from '@/components/ZoomInOutButton/index.vue';
 
 
-@Component
+@Component({
+    components: {
+        OSMToggleButton,
+        ZoomInOutButton,
+    },
+})
+
 export default class MapView extends Vue {
     private map!: L.Map;
     private defaultZoomLevel: number = 17;
@@ -29,7 +37,8 @@ export default class MapView extends Vue {
      */
     public mounted() {
         const rootMapCenter: Coordinate = Map.calculateCenter(mapViewGetters.rootMap.getBounds());
-        this.map = L.map('map').setView([rootMapCenter.lat, rootMapCenter.lng], this.defaultZoomLevel);
+        this.map = L.map('map', { zoomControl: false })
+        .setView([rootMapCenter.lat, rootMapCenter.lng], this.defaultZoomLevel);
         this.tileLayer = L.tileLayer(
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 23,
@@ -38,7 +47,6 @@ export default class MapView extends Vue {
         ).addTo(this.map);
         this.map.on('zoomend', this.updateDisplayLevel);
         this.map.on('move', this.updateCenterSpotInRootMap);
-        this.map.zoomControl.setPosition('bottomright');
         this.watchStoreForMoveMapCenter();
         this.watchStoreForDisplayMap();
         this.watchFocusedSpotChange();
@@ -331,5 +339,35 @@ export default class MapView extends Vue {
         }
         const firstDetailMap: Map = centerSpot.getDetailMaps()[0];
         return firstDetailMap;
+    }
+
+    /**
+     * zoom_inボタンを押した時にzoominする
+     */
+    private zoomIn() {
+        this.map.zoomIn();
+    }
+
+    /**
+     * zoom_outボタンを押した時にzoomoutする
+     */
+    private zoomOut() {
+        this.map.zoomOut();
+    }
+
+    /**
+     * OSMを表示する
+     * OSMToggleButtonコンポーネントがOsmOnイベントを発生させた時に実行される
+     */
+    private osmOn() {
+        this.tileLayer.setUrl('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    }
+
+    /**
+     * OSMを表示しない
+     * OSMToggleButtonコンポーネントがOsmOffイベントを発生させた時に実行される
+     */
+    private osmOff() {
+        this.tileLayer.setUrl('');
     }
 }
