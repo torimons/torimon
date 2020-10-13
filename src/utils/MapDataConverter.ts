@@ -67,11 +67,11 @@ export default class MapDataConverter {
             spotJson.id,
             spotJson.name,
             spotJson.coordinate,
+            spotJson.type,
             spotJson.shape,
             spotJson.floorName,
             spotJson.description,
             spotJson.attachment,
-            spotJson.type,
         );
         if (spotJson.detailMaps !== undefined) {
             // detailMapsはこの時点ではJson

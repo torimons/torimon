@@ -1,4 +1,4 @@
-import { Coordinate, Shape, SpotJson, SpotType } from '@/store/types.ts';
+import { Coordinate, Shape, SpotType, spotIconNames, SpotJson } from '@/store/types.ts';
 import Map from '@/Map/Map.ts';
 
 export default class Spot {
@@ -10,11 +10,11 @@ export default class Spot {
             private id: number,
             private name: string,
             private coordinate: Coordinate,
+            private type?: SpotType,
             private shape?: Shape,
             private floorName?: string,
             private description?: string,
-            private attachment?: [{name: string, url: string}],
-            private type?: SpotType ) {
+            private attachment?: [{name: string, url: string}] ) {
         /* 何もしない */
     }
 
@@ -40,6 +40,17 @@ export default class Spot {
      */
     public getCoordinate(): Coordinate {
         return this.coordinate;
+    }
+
+    /**
+     * スポットのtypeを返す
+     * @return スポットのtype, undefinedの場合'general'を返す
+     */
+    public getType(): SpotType {
+        if (this.type === undefined) {
+            return 'general';
+        }
+        return this.type;
     }
 
     /**
@@ -84,29 +95,14 @@ export default class Spot {
     }
 
     /**
-     * スポットのtypeを返す
-     * @return スポットのtype, undefinedの場合'default'を返す
-     */
-    public getType(): SpotType {
-        if (this.type === undefined) {
-            return 'default';
-        }
-        return this.type;
-    }
-
-    /**
      * スポットのアイコン名を返す
-     * @return アイコン名, 存在しない場合'place'アイコン
+     * @return アイコン名.スポットタイプがundefinedの場合は'place'アイコンを返す
+     * @throw Error SpotTypeに対応するアイコン名が存在しない場合
      */
     public getIconName(): string {
-        const iconNameMaps: Array<{ key: SpotType, iconName: string }> = [
-            { key: 'default',       iconName: 'place' },
-            { key: 'withDetailMap', iconName: 'add_location' },
-            { key: 'restroom',      iconName: 'wc' },
-        ];
-        const iconName = iconNameMaps.find((iconNameMap) => iconNameMap.key === this.getType())?.iconName;
+        const iconName = spotIconNames[this.getType()];
         if (iconName === undefined) {
-            throw new Error('Illegal implements of "iconNameMaps".');
+            throw new Error('Illegal implements of "spotIconNames".');
         }
         return iconName;
     }

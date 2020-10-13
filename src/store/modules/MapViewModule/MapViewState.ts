@@ -29,6 +29,7 @@ export function createSpotInstance(spotData: RawSpot): Spot {
         spotData.id,
         spotData.name,
         spotData.coordinate,
+        'general',
         spotData.shape,
         spotData.floorName,
         spotData.description,
