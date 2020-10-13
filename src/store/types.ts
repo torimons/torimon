@@ -129,6 +129,38 @@ export interface Edge {
 export type DisplayLevelType = 'default' | 'detail';
 
 /**
+ * Map型のデータをJSONで扱う時の型
+ */
+export interface MapJson {
+    id: number;
+    name: string;
+    bounds: Bounds;
+    floorName?: string;
+    description?: string;
+    spots: SpotJson[];
+}
+
+/**
+ * Spot型のデータをJsonで扱う時の型
+ */
+export interface SpotJson {
+    id: number;
+    name: string;
+    coordinate: Coordinate;
+    shape?: Shape;
+    floorName?: string;
+    description?: string;
+    attachment?: [
+        {
+            name: string;
+            url: string;
+        }
+    ];
+    type?: SpotType;
+    detailMaps: MapJson[];
+}
+
+/**
  * ### スポットの種別
  * - general
  *     - 汎用スポット
