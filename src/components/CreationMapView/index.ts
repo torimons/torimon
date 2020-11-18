@@ -4,14 +4,16 @@ import L, { LeafletEvent, Marker } from 'leaflet';
 import { Coordinate, SpotType, EditMode, EventOnMapCreation } from '@/store/types';
 import { creationViewGetters, creationViewMutations, creationViewStore } from '@/store';
 import Map from '@/Map/Map.ts';
-import EditorToolBar from '@/components/EditorToolBar/index.vue';
 import Spot from '@/Spot/Spot';
+import EditorToolBar from '@/components/EditorToolBar/index.vue';
+import UploadDialog from '@/components/UploadDialog/index.vue';
 import SpotMarker from '@/components/MapView/Marker/SpotMarker';
 import { CreationViewGetters } from '@/store/modules/CreationViewModule/CreationViewGetters';
 
 @Component({
     components: {
         EditorToolBar,
+        UploadDialog,
     },
 })
 export default class CreationMapView extends Vue {
